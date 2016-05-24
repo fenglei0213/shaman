@@ -24,6 +24,7 @@
         <joda-time.version>2.1</joda-time.version>
         <jackson.version>1.9.5</jackson.version>
         <freemarker.version>2.3.20</freemarker.version>
+        <snakeyaml.version>1.9</snakeyaml.version>
     </properties>
 
     <dependencyManagement>
@@ -62,11 +63,6 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
@@ -302,9 +298,9 @@
                 <version>1.3.1</version>
             </dependency>
             <dependency>
-                <groupId>com.baidu</groupId>
-                <artifactId>bns-client</artifactId>
-                <version>1.1.0</version>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
