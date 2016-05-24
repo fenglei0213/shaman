@@ -45,10 +45,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
         <dependency>
@@ -180,21 +176,14 @@
         </dependency>
         <!-- AOP end -->
         <dependency>
-            <groupId>com.baidu</groupId>
-            <artifactId>bns-client</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
-        <!-- WEB begin -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <!--<scope>provided</scope>-->
-        </dependency>
-        <!-- WEB end -->
     </dependencies>
     <build>
         <!--<testResources>-->
