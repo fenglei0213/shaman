@@ -1,4 +1,4 @@
-package org.shaman.dao;
+package org.shaman.core.dao;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,6 +1,6 @@
-package org.shaman.dao;
+package org.shaman.core.dao;
 
-import org.shaman.dao.BaseSetter;
+import org.shaman.core.dao.BaseSetter;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
 import java.lang.reflect.Field;
