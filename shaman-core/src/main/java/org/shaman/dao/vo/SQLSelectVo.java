@@ -1,7 +1,6 @@
 package org.shaman.dao.vo;
 
 import com.google.common.collect.Lists;
-import org.shaman.dao.vo.SQLBaseVo;
 
 import java.util.List;
 

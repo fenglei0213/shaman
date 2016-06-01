@@ -1,9 +1,6 @@
-package org.shaman.core.dao;
+package org.shaman.dao;
 
-import org.shaman.core.dao.vo.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

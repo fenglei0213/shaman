@@ -1,8 +1,8 @@
-package org.shaman.core.dao;
+package org.shaman.dao;
 
-import org.shaman.core.dao.vo.SQLInsertVo;
-import org.shaman.core.dao.vo.SQLSelectVo;
-import org.shaman.core.dao.vo.SQLUpdateVo;
+import org.shaman.dao.vo.SQLInsertVo;
+import org.shaman.dao.vo.SQLSelectVo;
+import org.shaman.dao.vo.SQLUpdateVo;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

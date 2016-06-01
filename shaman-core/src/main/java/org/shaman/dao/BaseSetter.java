@@ -1,4 +1,4 @@
-package org.shaman.core.dao;
+package org.shaman.dao;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;

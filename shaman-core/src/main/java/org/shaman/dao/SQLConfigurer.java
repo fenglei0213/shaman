@@ -3,7 +3,6 @@ package org.shaman.dao;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 

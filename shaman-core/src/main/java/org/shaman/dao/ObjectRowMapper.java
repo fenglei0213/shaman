@@ -1,6 +1,5 @@
 package org.shaman.dao;
 
-import org.shaman.dao.FieldMeta;
 import org.shaman.util.HumpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

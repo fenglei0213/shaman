@@ -1,7 +1,6 @@
 package org.shaman.dao.vo;
 
 import com.google.common.collect.Maps;
-import org.shaman.dao.vo.SQLBaseVo;
 
 import java.lang.reflect.Field;
 import java.util.Map;
