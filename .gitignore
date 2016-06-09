@@ -1,0 +1,7 @@
+/.idea
+/*.iml
+/shaman-core/target
+/shaman-example/target
+/shaman-core/*.iml
+/shaman-example/*.iml
+/shaman-parent/shaman-parent.iml
