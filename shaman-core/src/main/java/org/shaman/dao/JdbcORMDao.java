@@ -1,7 +1,7 @@
 package org.shaman.dao;
 
 import org.springframework.dao.DataAccessException;
-
+import org.shaman.dao.vo.*;
 import java.util.List;
 
 /**

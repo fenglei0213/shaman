@@ -45,10 +45,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
         <dependency>
@@ -78,23 +74,6 @@
         <!-- logging end -->
 
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <type>jar</type>
-        </dependency>
-
-        <!-- email begin -->
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-        </dependency>
-        <!-- email end -->
-
-        <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <type>jar</type>
@@ -112,17 +91,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- joda time start -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <classifier>javadoc</classifier>
-        </dependency>
-        <!-- joda time end -->
         <!-- db pool -->
         <!--        <dependency>
             <groupId>com.alibaba</groupId>
@@ -155,59 +123,9 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
         </dependency>
-        <!-- AOP begin -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.2.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>3.3.1</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- AOP end -->
-        <dependency>
-            <groupId>com.baidu</groupId>
-            <artifactId>bns-client</artifactId>
-        </dependency>
-        <!-- WEB begin -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <!--<scope>provided</scope>-->
-        </dependency>
-        <!-- WEB end -->
     </dependencies>
     <build>
-        <!--<testResources>-->
-        <!--<testResource>-->
-        <!--<directory>../newlog-conf/src/main/resources/base</directory>-->
-        <!--<filtering>true</filtering>-->
-        <!--</testResource>-->
-        <!--<testResource>-->
-        <!--&lt;!&ndash;<directory>../newlog-conf/src/main/resources/${package.environment}</directory>&ndash;&gt;-->
-        <!--<directory>../newlog-conf/src/main/resources/dev</directory>-->
-        <!--<filtering>true</filtering>-->
-        <!--</testResource>-->
-        <!--</testResources>-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -226,14 +144,14 @@
                     <encoding>utf8</encoding>
                 </configuration>
             </plugin>
-            <plugin>
+           <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
