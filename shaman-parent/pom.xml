@@ -33,6 +33,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.shaman</groupId>
+                <artifactId>shaman-core</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
+            </dependency>
             <!-- spring begin -->
             <dependency>
                 <groupId>org.springframework</groupId>
