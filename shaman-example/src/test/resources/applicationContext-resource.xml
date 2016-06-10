@@ -23,9 +23,12 @@
         <property name="locations">
             <list>
                 <value>classpath*:jdbc.properties</value>
-                <value>classpath*:newlog.properties</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="H2DataBase" class="org.shaman.example.db.H2DataBase" init-method="start" destroy-method="stop">
+
     </bean>
 
 </beans>

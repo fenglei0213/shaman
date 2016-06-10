@@ -16,4 +16,10 @@
         <module>shaman-core</module>
         <module>shaman-example</module>
     </modules>
+    <distributionManagement>
+        <repository>
+            <id>fenglei0213-mvn-repo</id>
+            <url>file:C:/workspace/github/maven-repo/repository/</url>
+        </repository>
+    </distributionManagement>
 </project>

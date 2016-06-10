@@ -1,4 +1,4 @@
-package org.shaman.example;
+package org.shaman.example.db;
 
 import org.h2.tools.Server;
 
@@ -9,12 +9,12 @@ import java.sql.SQLException;
  */
 public class H2DataBase {
 
-    private static Server server;
+    private Server server;
 
     /**
      *  start start
      */
-    public static void start() {
+    public void start() {
         try {
             System.out.println("正在启动h2...");
             server = Server.createTcpServer(
@@ -32,7 +32,7 @@ public class H2DataBase {
      * stop stop
      *
      */
-    public static void stop() {
+    public void stop() {
         if (server != null) {
             System.out.println("正在关闭h2...");
             server.stop();
