@@ -14,7 +14,7 @@ public class QueryVo<T> extends BaseVo {
 
     private List<String> selectColumnList = Lists.newArrayList();
 
-    private Map<String, Object> whereColumnMap = Maps.newTreeMap();
+    private Map<String, Object> whereColumnMap = Maps.newLinkedHashMap();
 
     private Map<String, Integer> distinctColumnMap = Maps.newHashMap();
 
