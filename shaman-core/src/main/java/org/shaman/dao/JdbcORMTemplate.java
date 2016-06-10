@@ -132,38 +132,4 @@ public class JdbcORMTemplate extends JdbcTemplate {
         return results.iterator().next();
     }
 
-    /**
-     * queryForLong queryForLong
-     *
-     * @param sqlSelectVo
-     * @return
-     */
-    public long queryForLong(SQLSelectVo sqlSelectVo) {
-        String sql = sqlSelectVo.getSql();
-        Object[] args = sqlSelectVo.getArgList().toArray();
-        return super.queryForLong(sql, args);
-    }
-
-    /**
-     * queryForLong queryForLong
-     *
-     * @param sqlSelectVo
-     * @return
-     */
-    public int queryForInt(SQLSelectVo sqlSelectVo) {
-        String sql = sqlSelectVo.getSql();
-        Object[] args = sqlSelectVo.getArgList().toArray();
-        return super.queryForInt(sql, args);
-    }
-
-    /**
-     * queryForLong queryForLong
-     *
-     * @param sql
-     * @param args
-     * @return
-     */
-    public int queryForInt(String sql, Object[] args) {
-        return super.queryForInt(sql, args);
-    }
 }

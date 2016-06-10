@@ -25,6 +25,10 @@
         <jackson.version>1.9.5</jackson.version>
         <freemarker.version>2.3.20</freemarker.version>
         <snakeyaml.version>1.9</snakeyaml.version>
+        <h2.version>1.4.191</h2.version>
+        <log4j.version>1.2.16</log4j.version>
+        <httpclient.version>1.2.16</httpclient.version>
+        <httpcomponents.httpclient.version>4.5</httpcomponents.httpclient.version>
     </properties>
 
     <dependencyManagement>
@@ -98,7 +102,7 @@
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
-                <version>1.2.16</version>
+                <version>${log4j.version}</version>
             </dependency>
             <!-- logging end -->
 
@@ -174,12 +178,12 @@
             <dependency>
                 <groupId>httpclient</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.3.1</version>
+                <version>${httpclient.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5</version>
+                <version>${httpcomponents.httpclient.version}</version>
             </dependency>
             <!-- quartz -->
             <dependency>
@@ -290,6 +294,11 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>${snakeyaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
