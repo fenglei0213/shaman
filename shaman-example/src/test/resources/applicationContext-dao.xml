@@ -6,7 +6,7 @@
        default-autowire="byName" default-lazy-init="true">
 
 
-    <!--<bean id="sqlConfigurer" class="com.baidu.tieba.newlog.util.dao.SQLConfigurer">-->
+    <!--<bean id="sqlConfigurer" class="org.shaman.util.SQLConfigurer">-->
         <!--<property name="sqlFileList">-->
             <!--<list>-->
                 <!--<value>/sql/newlog.sql</value>-->
@@ -14,8 +14,8 @@
         <!--</property>-->
     <!--</bean>-->
 
-    <bean id="jdbcORMDao" class="org.shaman.dao.JdbcORMDao">
-        <property name="jdbcORMTemplate" ref="jdbcORMTemplate"/>
+    <bean id="shamanDao" class="org.shaman.dao.ShamanDao">
+        <property name="shamanTemplate" ref="shamanTemplate"/>
     </bean>
 
     <!--jdbcTemplate-->
@@ -24,7 +24,7 @@
         <property name="dataSource" ref="dataSourceMySQL"/>
     </bean>
 
-    <bean id="jdbcORMTemplate" class="com.baidu.tieba.newlog.util.dao.JdbcORMTemplate">
+    <bean id="shamanTemplate" class="org.shaman.dao.ShamanTemplate">
         <property name="dataSource" ref="dataSourceMySQL"/>
     </bean>
 

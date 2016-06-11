@@ -2,8 +2,8 @@ package org.shaman.dao.vo;
 
 import com.google.common.collect.Maps;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by fenglei on 2016/3/7.
@@ -18,7 +18,15 @@ public class QueryCountVo extends BaseVo {
      */
     private String countColumnName;
 
-    private Map<String, Object> whereColumnMap = Maps.newTreeMap();
+    private Map<String, Object> whereColumnMap = Maps.newLinkedHashMap();
+
+    private QueryCountVo(){
+
+    }
+
+    public QueryCountVo(Class tableClazz){
+        super.setTableClazz(tableClazz);
+    }
 
     public String getCountColumnName() {
         return countColumnName;
@@ -39,7 +47,7 @@ public class QueryCountVo extends BaseVo {
      * @param whereColumnMap
      * @param <T>
      */
-    public <T extends TreeMap<String, Object>> QueryCountVo setWhereColumnMap(T whereColumnMap) {
+    public <T extends LinkedHashMap<String, Object>> QueryCountVo setWhereColumnMap(T whereColumnMap) {
         this.whereColumnMap = whereColumnMap;
         return this;
     }

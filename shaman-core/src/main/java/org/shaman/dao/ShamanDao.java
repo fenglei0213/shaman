@@ -1,7 +1,9 @@
 package org.shaman.dao;
 
+import org.shaman.util.ReflectionUtils;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -68,7 +70,9 @@ public class ShamanDao {
      * @param <T>
      * @return
      */
-    public <T> List<T> queryListForTable(QueryVo<T> queryVo) {
+    public <T> List<T> queryList(QueryVo<T> queryVo) {
+//        Class tableClazz = ReflectionUtils.getGenericClass(queryVo);
+//        queryVo.setTableClazz(tableClazz);
         SQLSelectVo<T> sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryListForTable(sqlSelectVo);
     }
@@ -78,7 +82,7 @@ public class ShamanDao {
      * @param <T>
      * @return
      */
-    public <T> T queryObjectForTable(QueryVo<T> queryVo) {
+    public <T> T queryObject(QueryVo<T> queryVo) {
         SQLSelectVo<T> sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryObjectForTable(sqlSelectVo);
     }
@@ -100,9 +104,22 @@ public class ShamanDao {
      * @param obj
      * @param <T>
      */
-    public <T> void insertObjectForTable(T obj) {
+    public <T> void insertObject(T obj) {
         SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj);
-        shamanTemplate.insertTable(sqlInsertVo);
+        shamanTemplate.insert(sqlInsertVo);
+    }
+
+    /**
+     * insertObjectBatch insertObjectBatch
+     * @param objectList
+     * @param <T>
+     */
+    public <T> void insertObjectBatch(List<T> objectList) {
+        if(CollectionUtils.isEmpty(objectList)){
+            return;
+        }
+        SQLInsertBatchVo sqlInsertBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList);
+        shamanTemplate.insertBatch(sqlInsertBatchVo);
     }
 
     /**
@@ -110,12 +127,14 @@ public class ShamanDao {
      *
      * @param deleteVo
      */
-    public void deleteRowForTable(DeleteVo deleteVo) {
+    public void deleteRow(DeleteVo deleteVo) {
         String deleteSQL = SQLBuilder.buildDeleteTableSQL(deleteVo);
-        shamanTemplate.deleteRowForTable(deleteSQL);
+        shamanTemplate.delete(deleteSQL);
     }
 
     public void setShamanTemplate(ShamanTemplate shamanTemplate) {
         this.shamanTemplate = shamanTemplate;
     }
+
+
 }

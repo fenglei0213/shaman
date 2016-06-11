@@ -14,7 +14,7 @@
 
     <description>init config</description>
 
-    <import resource="applicationContext-tx.xml" />
-    <import resource="applicationContext-dao.xml" />
     <import resource="applicationContext-resource.xml" />
+    <import resource="applicationContext-dao.xml" />
+    <import resource="applicationContext-tx.xml" />
 </beans>

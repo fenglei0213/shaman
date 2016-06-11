@@ -3,7 +3,7 @@ package org.shaman.dao.vo;
 /**
  * Created by fenglei on 2016/3/7.
  */
-public abstract class BaseVo {
+public abstract class BaseVo<T> {
 
     private Class tableClazz;
 
@@ -17,8 +17,7 @@ public abstract class BaseVo {
      * @param tableClazz
      * @return
      */
-    public BaseVo setTableClazz(Class tableClazz) {
+    public void setTableClazz(Class tableClazz) {
         this.tableClazz = tableClazz;
-        return this;
     }
 }

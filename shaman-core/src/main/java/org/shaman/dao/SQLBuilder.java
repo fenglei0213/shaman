@@ -1,5 +1,6 @@
 package org.shaman.dao;
 
+import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtil;
 import org.springframework.util.Assert;
@@ -75,10 +76,29 @@ public class SQLBuilder {
     }
 
     /**
-     * buildUpdateTableSql buildUpdateTableSql
+     * buildInsertTableSQL buildInsertTableSQL
      *
+     * @param objectList
+     * @return
+     */
+    public static <T> SQLInsertBatchVo buildInsertBatchTableSQL(List<T> objectList) {
+        SQLInsertBatchVo sqlInsertBatchVo = new SQLInsertBatchVo();
+        List<Map<Field, Object>> sqlSetList = sqlInsertBatchVo.getSqlSetList();
+        // Performance Optimization Here
+        for (T object : objectList) {
+            SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object);
+            sqlSetList.add(sqlInsertVo.getSqlSetMap());
+            sqlInsertBatchVo.setSql(sqlInsertVo.getSql());
+        }
+        return sqlInsertBatchVo;
+    }
+
+    /**
+     * buildUpdateTableSql buildUpdateTableSql
+     * <p>
      * support composite keys
      * should set mutiple key with @FieldMeta(id = true) annotation in POJO
+     *
      * @param obj
      * @return
      */

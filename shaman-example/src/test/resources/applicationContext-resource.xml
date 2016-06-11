@@ -7,16 +7,10 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
        xmlns:p="http://www.springframework.org/schema/p"
        default-lazy-init="true">
-    <!--<bean id="springContextHolder" class="com.mycompany.dprofile.util.SpringContextHolder" />-->
-    <context:component-scan base-package="com.baidu.tieba.newlog">
+    <context:component-scan base-package="org.shaman.example">
     </context:component-scan>
 
-    <!--<bean id="sendDetectUrlkeyMailCusJob" class="com.baidu.tieba.newlog.biz.SendDetectUrlkeyMailCusJob"-->
-          <!--init-method="init">-->
-
-    <!--</bean>-->
-
-    <bean id="propertyConfigurer" class="com.baidu.tieba.newlog.util.PropertyConfigurer">
+    <bean id="propertyConfigurer" class="org.shaman.util.PropertyConfigurer">
         <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
         <property name="ignoreResourceNotFound" value="false"/>
@@ -27,8 +21,8 @@
         </property>
     </bean>
 
-    <bean id="H2DataBase" class="org.shaman.example.db.H2DataBase" init-method="start" destroy-method="stop">
+    <!--<bean id="H2DataBase" class="org.shaman.example.db.H2DataBase" init-method="start" destroy-method="stop">-->
 
-    </bean>
+    <!--</bean>-->
 
 </beans>

@@ -1,5 +1,9 @@
 package org.shaman.dao;
 
+import org.shaman.dao.setter.InsertBatchSetter;
+import org.shaman.dao.setter.InsertSetter;
+import org.shaman.dao.setter.UpdateSetter;
+import org.shaman.dao.vo.SQLInsertBatchVo;
 import org.shaman.dao.vo.SQLInsertVo;
 import org.shaman.dao.vo.SQLSelectVo;
 import org.shaman.dao.vo.SQLUpdateVo;
@@ -39,9 +43,9 @@ public class ShamanTemplate extends JdbcTemplate {
      */
     public void updateTable(SQLUpdateVo sqlUpdateVo) {
         String sql = sqlUpdateVo.getSql();
-        final Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
-        final Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
-        org.shaman.dao.UpdateSetter updateSetter = new org.shaman.dao.UpdateSetter(sqlSetMap, sqlWhereMap);
+        Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+        Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
+        UpdateSetter updateSetter = new UpdateSetter(sqlSetMap, sqlWhereMap);
         super.update(sql, updateSetter);
     }
 
@@ -60,27 +64,32 @@ public class ShamanTemplate extends JdbcTemplate {
      *
      * @param sqlInsertVo
      */
-    public void insertTable(SQLInsertVo sqlInsertVo) {
+    public void insert(SQLInsertVo sqlInsertVo) {
         String sql = sqlInsertVo.getSql();
-        final Map<Field, Object> sqlSetMap = sqlInsertVo.getSqlSetMap();
+        Map<Field, Object> sqlSetMap = sqlInsertVo.getSqlSetMap();
         InsertSetter insertSetter = new InsertSetter(sqlSetMap);
         super.update(sql, insertSetter);
     }
 
-    public <T> void insertTableBatch(List<T> objList) {
-
+    public <T> void insertBatch(SQLInsertBatchVo sqlInsertBatchVo) {
+        String sql = sqlInsertBatchVo.getSql();
+        List<Map<Field,Object>> sqlSetList = sqlInsertBatchVo.getSqlSetList();
+        InsertBatchSetter insertBatchSetter = new InsertBatchSetter(sqlSetList);
+        super.batchUpdate(sql,insertBatchSetter);
     }
 
     /**
      * deleteRowForTable deleteRowForTable
      *
      * @param deleteSQL
-     * @param <T>
      */
-    public <T> void deleteRowForTable(String deleteSQL) {
+    public void delete(String deleteSQL) {
         super.update(deleteSQL);
     }
 
+    public <T> void delete(){
+
+    }
     /**
      * queryForTable queryForTable
      *
@@ -105,7 +114,6 @@ public class ShamanTemplate extends JdbcTemplate {
         String sql = sqlSelectVo.getSql();
         Class<T> clazz = sqlSelectVo.getTableClazz();
         Object[] args = sqlSelectVo.getArgList().toArray();
-//        T obj = this.queryForObject(sql, args, clazz);
         List<T> list = this.query(sql, args, clazz);
         if (list.size() > 0) {
             return list.get(0);
