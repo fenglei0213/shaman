@@ -8,19 +8,13 @@ import org.shaman.example.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 /**
  * Created by fenglei on 2016/6/10.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/init.xml"})
-@Transactional(transactionManager = "txManager")
-public class InsertExampleTest {
+
+public class InsertExampleTest extends BaseTest{
     private static final Logger logger = LoggerFactory.getLogger(InsertExampleTest.class);
 
     @Autowired
