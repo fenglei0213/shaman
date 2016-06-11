@@ -6,8 +6,7 @@
 
     <groupId>org.shaman</groupId>
     <artifactId>shaman</artifactId>
-    <!--<version>1.0.1-SNAPSHOT</version>-->
-    <version>1.0.1-RELEASE</version>
+    <version>1.1.0-RELEASE</version>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,5 +16,11 @@
         <module>shaman-core</module>
         <module>shaman-example</module>
     </modules>
-
+    <developers>
+        <developer>
+            <id>fenglei0213</id>
+            <name>fenglei0213</name>
+            <email>240400164@qq.com</email>
+        </developer>
+    </developers>
 </project>

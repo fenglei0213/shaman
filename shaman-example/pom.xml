@@ -4,14 +4,10 @@
     <parent>
         <artifactId>shaman-parent</artifactId>
         <groupId>org.shaman</groupId>
-        <version>1.0.1-RELEASE</version>
-        <!--<version>${parent.version}</version>-->
-        <!--<version>1.0.1-SNAPSHOT</version>-->
+        <version>1.1.0-RELEASE</version>
     </parent>
     <groupId>org.shaman</groupId>
     <artifactId>shaman-example</artifactId>
-    <!--<version>${shaman.version}</version>-->
-    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>shaman-example</name>
