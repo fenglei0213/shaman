@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by fenglei on 2016/3/2.
  */
-public class JdbcORMTemplate extends JdbcTemplate {
+public class ShamanTemplate extends JdbcTemplate {
 
     /**
      * query query
@@ -130,6 +130,30 @@ public class JdbcORMTemplate extends JdbcTemplate {
             throw new IncorrectResultSizeDataAccessException(1, size);
         }
         return results.iterator().next();
+    }
+
+    /**
+     * queryForLong queryForLong
+     *
+     * @param sqlSelectVo
+     * @return
+     */
+    public long queryForLong(SQLSelectVo sqlSelectVo) {
+        String sql = sqlSelectVo.getSql();
+        Object[] args = sqlSelectVo.getArgList().toArray();
+        return super.queryForObject(sql, args, Long.class);
+    }
+
+    /**
+     * queryForLong queryForLong
+     *
+     * @param sqlSelectVo
+     * @return
+     */
+    public int queryForInt(SQLSelectVo sqlSelectVo) {
+        String sql = sqlSelectVo.getSql();
+        Object[] args = sqlSelectVo.getArgList().toArray();
+        return super.queryForObject(sql, args, Integer.class);
     }
 
 }

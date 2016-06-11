@@ -11,12 +11,13 @@ public class BaseTest {
 
     @Before
     public void before() {
-        H2DataBase.start();
+//        H2DataBase.start();
 
     }
 
     @After
     public void after() {
-        H2DataBase.stop();
+
+//        H2DataBase.stop();
     }
 }

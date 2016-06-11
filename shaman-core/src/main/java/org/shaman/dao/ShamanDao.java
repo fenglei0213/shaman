@@ -2,14 +2,15 @@ package org.shaman.dao;
 
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
+
 import java.util.List;
 
 /**
  * Created by fenglei on 2016/3/3.
  */
-public class JdbcORMDao {
+public class ShamanDao {
 
-    private JdbcORMTemplate jdbcORMTemplate;
+    private ShamanTemplate shamanTemplate;
 
     /**
      * query query
@@ -22,7 +23,7 @@ public class JdbcORMDao {
      * @throws DataAccessException
      */
     public <T> List<T> query(String sql, Object[] args, Class clazz) throws DataAccessException {
-        return jdbcORMTemplate.query(sql, args, clazz);
+        return shamanTemplate.query(sql, args, clazz);
     }
 
     /**
@@ -33,17 +34,7 @@ public class JdbcORMDao {
      */
     public int queryForCountInt(QueryCountVo queryCountVo) {
         SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectCountTableSQL(queryCountVo);
-        return jdbcORMTemplate.queryForInt(sqlSelectVo);
-    }
-
-    /**
-     * queryForCountInt queryForCountInt
-     *
-     * @param sql
-     * @return
-     */
-    public int queryForCountInt(String sql,Object[] args) {
-        return jdbcORMTemplate.queryForInt(sql,args);
+        return shamanTemplate.queryForInt(sqlSelectVo);
     }
 
     /**
@@ -54,7 +45,7 @@ public class JdbcORMDao {
      */
     public long queryForCountLong(QueryCountVo queryCountVo) {
         SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectCountTableSQL(queryCountVo);
-        return jdbcORMTemplate.queryForLong(sqlSelectVo);
+        return shamanTemplate.queryForLong(sqlSelectVo);
     }
 
     /**
@@ -67,7 +58,7 @@ public class JdbcORMDao {
      * @return
      */
     public <T> List<T> queryList(String sql, Object[] args, Class clazz) {
-        return jdbcORMTemplate.query(sql, args, clazz);
+        return shamanTemplate.query(sql, args, clazz);
     }
 
     /**
@@ -79,7 +70,7 @@ public class JdbcORMDao {
      */
     public <T> List<T> queryListForTable(QueryVo<T> queryVo) {
         SQLSelectVo<T> sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
-        return jdbcORMTemplate.queryListForTable(sqlSelectVo);
+        return shamanTemplate.queryListForTable(sqlSelectVo);
     }
 
     /**
@@ -89,7 +80,7 @@ public class JdbcORMDao {
      */
     public <T> T queryObjectForTable(QueryVo<T> queryVo) {
         SQLSelectVo<T> sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
-        return jdbcORMTemplate.queryObjectForTable(sqlSelectVo);
+        return shamanTemplate.queryObjectForTable(sqlSelectVo);
     }
 
     /**
@@ -100,7 +91,7 @@ public class JdbcORMDao {
      */
     public <T> void updateObjectForTable(T obj) {
         SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateTableSQL(obj);
-        jdbcORMTemplate.updateTable(sqlUpdateVo);
+        shamanTemplate.updateTable(sqlUpdateVo);
     }
 
     /**
@@ -111,7 +102,7 @@ public class JdbcORMDao {
      */
     public <T> void insertObjectForTable(T obj) {
         SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj);
-        jdbcORMTemplate.insertTable(sqlInsertVo);
+        shamanTemplate.insertTable(sqlInsertVo);
     }
 
     /**
@@ -121,10 +112,10 @@ public class JdbcORMDao {
      */
     public void deleteRowForTable(DeleteVo deleteVo) {
         String deleteSQL = SQLBuilder.buildDeleteTableSQL(deleteVo);
-        jdbcORMTemplate.deleteRowForTable(deleteSQL);
+        shamanTemplate.deleteRowForTable(deleteSQL);
     }
 
-    public void setJdbcORMTemplate(JdbcORMTemplate jdbcORMTemplate) {
-        this.jdbcORMTemplate = jdbcORMTemplate;
+    public void setShamanTemplate(ShamanTemplate shamanTemplate) {
+        this.shamanTemplate = shamanTemplate;
     }
 }

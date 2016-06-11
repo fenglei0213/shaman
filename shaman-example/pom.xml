@@ -4,10 +4,14 @@
     <parent>
         <artifactId>shaman-parent</artifactId>
         <groupId>org.shaman</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1-RELEASE</version>
+        <!--<version>${parent.version}</version>-->
+        <!--<version>1.0.1-SNAPSHOT</version>-->
     </parent>
     <groupId>org.shaman</groupId>
     <artifactId>shaman-example</artifactId>
+    <!--<version>${shaman.version}</version>-->
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>shaman-example</name>
@@ -85,23 +89,11 @@
         </dependency>
 
         <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer</artifactId>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- db pool -->
-        <!--        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
@@ -110,19 +102,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <!-- JSON -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
         </dependency>
         <!-- h2 -->
         <dependency>

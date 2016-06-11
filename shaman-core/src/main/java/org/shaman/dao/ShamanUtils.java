@@ -8,7 +8,7 @@ import org.shaman.dao.vo.QueryVo;
 /**
  * Created by fenglei on 2016/3/4.
  */
-public class JdbcORMUtils {
+public class ShamanUtils {
 
     public static QueryVo newQueryVo(){
           return new QueryVo();

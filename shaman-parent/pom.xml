@@ -4,13 +4,17 @@
 
     <groupId>org.shaman</groupId>
     <artifactId>shaman-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>${shaman.version}</version>
+    <!--<version>1.0.1-SNAPSHOT</version>-->
+    <!--<version>1.0.1-RELEASE</version>-->
     <packaging>pom</packaging>
 
     <name>shaman-parent</name>
     <url>http://maven.apache.org</url>
 
     <properties>
+        <shaman.version>1.0.1-RELEASE</shaman.version>
+        <!--<shaman.version>1.0.1-SNAPSHOT</shaman.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>4.2.6.RELEASE</spring.version>
         <quartz.version>2.1.7</quartz.version>
@@ -22,8 +26,6 @@
         <commons-io.version>2.4</commons-io.version>
         <guava.version>13.0.1</guava.version>
         <joda-time.version>2.1</joda-time.version>
-        <jackson.v.ersion>1.9.5</jackson.v.ersion>
-        <freemarker.version>2.3.20</freemarker.version>
         <snakeyaml.version>1.9</snakeyaml.version>
         <h2.version>1.4.191</h2.version>
         <log4j.version>1.2.16</log4j.version>
@@ -35,8 +37,13 @@
         <dependencies>
             <dependency>
                 <groupId>org.shaman</groupId>
+                <artifactId>shaman-parent</artifactId>
+                <version>${shaman.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.shaman</groupId>
                 <artifactId>shaman-core</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>${shaman.version}</version>
             </dependency>
             <!-- spring begin -->
             <dependency>
@@ -112,32 +119,6 @@
             <!-- logging end -->
 
             <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>2.3.18</version>
-                <type>jar</type>
-            </dependency>
-
-            <!-- email begin -->
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>1.4.3</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.activation</groupId>
-                <artifactId>activation</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-            <!-- email end -->
-            <dependency>
-                <groupId>net.sf.dozer</groupId>
-                <artifactId>dozer</artifactId>
-                <version>5.2.1</version>
-                <type>jar</type>
-            </dependency>
-
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.8.2</version>
@@ -162,12 +143,7 @@
                 <classifier>javadoc</classifier>
             </dependency>
             <!-- joda time end -->
-            <!-- db pool -->
-            <!--        <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>-->
+
             <dependency>
                 <groupId>c3p0</groupId>
                 <artifactId>c3p0</artifactId>
@@ -245,22 +221,6 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.jasig.cas.client</groupId>
-                <artifactId>cas-client-core</artifactId>
-                <version>3.3.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jasig.cas.client</groupId>
-                <artifactId>cas-client-core</artifactId>
-                <version>3.3.3</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
             <!-- AOP begin -->
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -321,4 +281,13 @@
     <!--<url>http://code.alibabatech.com/svn/fastjson/repository/</url>-->
     <!--</repository>-->
     <!--</repositories>-->
+    <distributionManagement>
+        <repository>
+            <id>fenglei0213-mvn-repo</id>
+            <name>fenglei0213-mvn-repo</name>
+            <url>file://C:/workspace/github/maven-repo/repository/</url>
+        </repository>
+    </distributionManagement>
+
+
 </project>

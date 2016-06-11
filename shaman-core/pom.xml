@@ -4,10 +4,13 @@
     <parent>
         <artifactId>shaman-parent</artifactId>
         <groupId>org.shaman</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <!--<version>${shaman.version}</version>-->
+        <!--<version>1.0.1-SNAPSHOT</version>-->
+        <version>1.0.1-RELEASE</version>
     </parent>
     <groupId>org.shaman</groupId>
     <artifactId>shaman-core</artifactId>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <name>shaman-core</name>
@@ -78,12 +81,6 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer</artifactId>
             <type>jar</type>
         </dependency>
 
