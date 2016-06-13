@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 /**
  * Created by fenglei on 2016/6/9.
  */
@@ -29,9 +31,12 @@ public class QueryExample {
      */
     public UserInfo queryForUserInfo(final String userName, final String passwd) {
         QueryVo<UserInfo> queryVo = ShamanUtils.newQueryVo(UserInfo.class);
+//        queryVo.setSelectColumnList("*")
+//                .setWhereColumnMap(UserInfo.USER_NAME, userName)
+//                .setWhereColumnMap(UserInfo.PASSWD, passwd);
         queryVo.setSelectColumnList("*")
-                .setWhereColumnMap(UserInfo.USER_NAME, userName)
-                .setWhereColumnMap(UserInfo.PASSWD, passwd);
+                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList(1,2));
+
         // or
 //        queryVo.setSelectColumnList(Arrays.asList("*"));
 //        queryVo.setWhereColumnMap(new LinkedHashMap<String, Object>() {
@@ -43,6 +48,7 @@ public class QueryExample {
 //        );
 
         UserInfo userInfo = shamanDao.queryObject(queryVo);
+
         return userInfo;
     }
 }

@@ -1,5 +1,6 @@
 package org.shaman.dao;
 
+import com.google.common.collect.Maps;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtil;
@@ -169,6 +170,7 @@ public class SQLBuilder {
         Class tableClazz = queryVo.getTableClazz();
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryVo.getWhereColumnMap();
+        Map<String, List<Number>> whereColumnInMap = queryVo.getWhereColumnInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT ");
@@ -182,7 +184,7 @@ public class SQLBuilder {
         String sqlColumnString = sqlColumnBuilder.toString();
         sqlColumnString = sqlColumnString.substring(0, sqlColumnString.lastIndexOf(","));
         // build SQL WHERE
-        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, argList);
+        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, whereColumnInMap, argList);
         // join SQL SELECT
         sqlBuilder.append(sqlColumnString);
         // join SQL FROM
@@ -211,11 +213,12 @@ public class SQLBuilder {
         String countColumName = queryCountVo.getCountColumnName();
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryCountVo.getWhereColumnMap();
+        Map<String, List<Number>> whereColumnInMap = Maps.newHashMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(")
                 .append(countColumName).append(")");
         // build SQL WHERE
-        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, argList);
+        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, whereColumnInMap, argList);
         // join SQL FROM
         sqlBuilder.append(" FROM ").append(tableName);
         // join SQL WHERE
@@ -231,10 +234,11 @@ public class SQLBuilder {
      * buildSQLWhere buildSQLWhere
      *
      * @param whereColumnMap
+     * @param whereColumnInMap
      * @param argList
      * @return
      */
-    public static String buildSQLWhere(Map<String, Object> whereColumnMap, List<Object> argList) {
+    public static String buildSQLWhere(Map<String, Object> whereColumnMap, Map<String, List<Number>> whereColumnInMap, List<Object> argList) {
         StringBuilder sqlWhereBuilder = new StringBuilder();
         sqlWhereBuilder.append(" WHERE ");
         for (Map.Entry<String, Object> mapItem : whereColumnMap.entrySet()) {
@@ -246,6 +250,21 @@ public class SQLBuilder {
         }
         String sqlWhereString = sqlWhereBuilder.toString();
         sqlWhereString = sqlWhereString.substring(0, sqlWhereString.lastIndexOf(" AND "));
+        // IN
+        // bug Only once
+        StringBuilder sqlWhereInBuilder = new StringBuilder();
+        for (Map.Entry<String, List<Number>> mapItem : whereColumnInMap.entrySet()) {
+            String whereColumnIn = mapItem.getKey();
+            List<Number> NumberList = mapItem.getValue();
+            sqlWhereInBuilder.append(whereColumnIn).append(" IN ").append("(");
+            for (Number number : NumberList) {
+                sqlWhereInBuilder.append(number).append(",");
+            }
+        }
+        String sqlWhereInString = sqlWhereInBuilder.toString();
+        sqlWhereInString = sqlWhereInString.substring(0, sqlWhereString.lastIndexOf(",")) + ")";
+        sqlWhereString = sqlWhereString + sqlWhereInString;
+        System.out.println("sql: " + sqlWhereString);
         return sqlWhereString;
     }
 
