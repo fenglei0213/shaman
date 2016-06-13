@@ -38,12 +38,12 @@ public class QueryVo<T> extends BaseVo<T> {
      *
      * @return
      */
-    public QueryVo setSelectColumnList(String... args) {
+    public QueryVo addColumn(String... args) {
         this.selectColumnList = Arrays.asList(args);
         return this;
     }
 
-    public QueryVo setSelectColumnList(List<String> selectColumnList) {
+    public QueryVo addColumnList(List<String> selectColumnList) {
         this.selectColumnList = selectColumnList;
         return this;
     }
@@ -58,7 +58,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param whereColumnMap
      * @param <T>
      */
-    public <T extends LinkedHashMap<String, Object>> QueryVo setWhereColumnMap(T whereColumnMap) {
+    public <T extends LinkedHashMap<String, Object>> QueryVo addConditionMap(T whereColumnMap) {
         this.whereColumnMap = whereColumnMap;
         return this;
     }
@@ -70,7 +70,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param value
      * @return
      */
-    public QueryVo setWhereColumnMap(String key, Object value) {
+    public QueryVo addCondition(String key, Object value) {
         this.whereColumnMap.put(key, value);
         return this;
     }
@@ -82,7 +82,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param inList
      * @return
      */
-    public QueryVo setWhereColumnINMap(String key, List<Object> inList) {
+    public QueryVo addInCondition(String key, List<Object> inList) {
         this.whereColumnInMap.put(key, inList);
         return this;
     }

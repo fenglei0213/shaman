@@ -6,7 +6,9 @@ import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtil;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -171,7 +173,7 @@ public class SQLBuilder {
         Class tableClazz = queryVo.getTableClazz();
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryVo.getWhereColumnMap();
-        Map<String, List<Number>> whereColumnInMap = queryVo.getWhereColumnInMap();
+        Map<String, List<Object>> whereColumnInMap = queryVo.getWhereColumnInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT ");
@@ -214,7 +216,7 @@ public class SQLBuilder {
         String countColumName = queryCountVo.getCountColumnName();
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryCountVo.getWhereColumnMap();
-        Map<String, List<Number>> whereColumnInMap = Maps.newHashMap();
+        Map<String, List<Object>> whereColumnInMap = Maps.newHashMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(")
                 .append(countColumName).append(")");
@@ -239,38 +241,57 @@ public class SQLBuilder {
      * @param argList
      * @return
      */
-    public static String buildSQLWhere(Map<String, Object> whereColumnMap, Map<String, List<Number>> whereColumnInMap, List<Object> argList) {
+    public static String buildSQLWhere(Map<String, Object> whereColumnMap, Map<String, List<Object>> whereColumnInMap, List<Object> argList) {
+        List<String> whereConditionAllList = Lists.newArrayList();
+        StringBuffer sqlWherePrefixBuilder = new StringBuffer(" WHERE ");
+        // Common WHERE Condition
         StringBuilder sqlWhereBuilder = new StringBuilder();
-        sqlWhereBuilder.append(" WHERE ");
         List<String> sqlWhereList = Lists.newArrayList();
         for (Map.Entry<String, Object> mapItem : whereColumnMap.entrySet()) {
             String whereColumn = mapItem.getKey();
             StringBuilder sqlWhereItemBuilder = new StringBuilder(whereColumn).append("=?");
-//            sqlWhereList.add(sqlWhereItemBuilder);
-//            CollectionUtils.
-//            ArrayUtils
+            sqlWhereList.add(sqlWhereItemBuilder.toString());
             // add argList
             Object whereValue = mapItem.getValue();
             argList.add(whereValue);
         }
-        String sqlWhereString = sqlWhereBuilder.toString();
-        sqlWhereString = sqlWhereString.substring(0, sqlWhereString.lastIndexOf(" AND "));
-        // IN
-        // bug Only once
-        StringBuilder sqlWhereInBuilder = new StringBuilder();
-        for (Map.Entry<String, List<Number>> mapItem : whereColumnInMap.entrySet()) {
-            String whereColumnIn = mapItem.getKey();
-            List<Number> NumberList = mapItem.getValue();
-            sqlWhereInBuilder.append(whereColumnIn).append(" IN ").append("(");
-            for (Number number : NumberList) {
-                sqlWhereInBuilder.append(number).append(",");
-            }
+        if (!CollectionUtils.isEmpty(sqlWhereList)) {
+            String sqlWhereString =
+                    sqlWhereBuilder.append(StringUtils.join(sqlWhereList, " AND ")).toString();
+            whereConditionAllList.add(sqlWhereString);
         }
-        String sqlWhereInString = sqlWhereInBuilder.toString();
-        sqlWhereInString = sqlWhereInString.substring(0, sqlWhereString.lastIndexOf(",")) + ")";
-        sqlWhereString = sqlWhereString + sqlWhereInString;
-        System.out.println("sql: " + sqlWhereString);
-        return sqlWhereString;
+        // IN WHERE Condition
+        // bug Only once
+        StringBuilder sqlWhereInItemBuilder = new StringBuilder();
+        for (Map.Entry<String, List<Object>> mapItem : whereColumnInMap.entrySet()) {
+            String whereColumnIn = mapItem.getKey();
+            List<Object> NumberList = mapItem.getValue();
+            sqlWhereInItemBuilder.append(whereColumnIn)
+                    .append(" IN ").append("(");
+            List<String> sqlWhereInItemList = Lists.newArrayList();
+            for (Object obj : NumberList) {
+                StringBuffer objBuf = new StringBuffer();
+                if (obj instanceof String) {
+                    objBuf = objBuf.append("\"")
+                            .append(obj.toString())
+                            .append("\"");
+                } else {
+                    objBuf = objBuf.append(obj.toString());
+                }
+                StringBuilder sqlWhereInItemItemBuilder = new StringBuilder(objBuf);
+                sqlWhereInItemList.add(sqlWhereInItemItemBuilder.toString());
+            }
+            sqlWhereInItemBuilder.append(StringUtils.join(sqlWhereInItemList, ","))
+                    .append(")");
+        }
+        if (!StringUtils.isEmpty(sqlWhereInItemBuilder)) {
+            whereConditionAllList.add(sqlWhereInItemBuilder.toString());
+        }
+        String whereSql = sqlWherePrefixBuilder
+                .append(StringUtils.join(whereConditionAllList, " AND "))
+                .toString();
+        System.out.println("sql: " + whereSql);
+        return whereSql;
     }
 
 

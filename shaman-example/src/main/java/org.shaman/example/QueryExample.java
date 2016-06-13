@@ -34,9 +34,10 @@ public class QueryExample {
 //        queryVo.setSelectColumnList("*")
 //                .setWhereColumnMap(UserInfo.USER_NAME, userName)
 //                .setWhereColumnMap(UserInfo.PASSWD, passwd);
-        queryVo.setSelectColumnList("*")
-                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList(""));
-
+//        queryVo.setSelectColumnList("*")
+//                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList("zhangsan"));
+        queryVo.addColumn("*")
+                .addInCondition(UserInfo.ID, Arrays.asList(1));
         // or
 //        queryVo.setSelectColumnList(Arrays.asList("*"));
 //        queryVo.setWhereColumnMap(new LinkedHashMap<String, Object>() {
