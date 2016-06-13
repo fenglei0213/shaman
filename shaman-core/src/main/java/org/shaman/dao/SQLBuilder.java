@@ -1,5 +1,6 @@
 package org.shaman.dao;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
@@ -241,9 +242,13 @@ public class SQLBuilder {
     public static String buildSQLWhere(Map<String, Object> whereColumnMap, Map<String, List<Number>> whereColumnInMap, List<Object> argList) {
         StringBuilder sqlWhereBuilder = new StringBuilder();
         sqlWhereBuilder.append(" WHERE ");
+        List<String> sqlWhereList = Lists.newArrayList();
         for (Map.Entry<String, Object> mapItem : whereColumnMap.entrySet()) {
             String whereColumn = mapItem.getKey();
-            sqlWhereBuilder.append(whereColumn).append("=? AND ");
+            StringBuilder sqlWhereItemBuilder = new StringBuilder(whereColumn).append("=?");
+//            sqlWhereList.add(sqlWhereItemBuilder);
+//            CollectionUtils.
+//            ArrayUtils
             // add argList
             Object whereValue = mapItem.getValue();
             argList.add(whereValue);

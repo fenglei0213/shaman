@@ -35,7 +35,7 @@ public class QueryExample {
 //                .setWhereColumnMap(UserInfo.USER_NAME, userName)
 //                .setWhereColumnMap(UserInfo.PASSWD, passwd);
         queryVo.setSelectColumnList("*")
-                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList(1,2));
+                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList(""));
 
         // or
 //        queryVo.setSelectColumnList(Arrays.asList("*"));

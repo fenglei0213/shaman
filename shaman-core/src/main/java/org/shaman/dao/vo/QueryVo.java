@@ -17,7 +17,7 @@ public class QueryVo<T> extends BaseVo<T> {
 
     private Map<String, Object> whereColumnMap = Maps.newLinkedHashMap();
 
-    private Map<String, List<Number>> whereColumnInMap = Maps.newLinkedHashMap();
+    private Map<String, List<Object>> whereColumnInMap = Maps.newLinkedHashMap();
 
     private Map<String, Integer> distinctColumnMap = Maps.newHashMap();
 
@@ -82,7 +82,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param inList
      * @return
      */
-    public QueryVo setWhereColumnINMap(String key, List<Number> inList) {
+    public QueryVo setWhereColumnINMap(String key, List<Object> inList) {
         this.whereColumnInMap.put(key, inList);
         return this;
     }
@@ -102,11 +102,11 @@ public class QueryVo<T> extends BaseVo<T> {
         return this;
     }
 
-    public Map<String, List<Number>> getWhereColumnInMap() {
+    public Map<String, List<Object>> getWhereColumnInMap() {
         return whereColumnInMap;
     }
 
-    public void setWhereColumnInMap(Map<String, List<Number>> whereColumnInMap) {
+    public void setWhereColumnInMap(Map<String, List<Object>> whereColumnInMap) {
         this.whereColumnInMap = whereColumnInMap;
     }
 }

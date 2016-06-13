@@ -1,7 +1,6 @@
 package org.shaman.example;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.shaman.example.utils.MD5Util;
 import org.shaman.example.vo.UserInfo;
 import org.slf4j.Logger;
