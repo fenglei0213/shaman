@@ -290,7 +290,6 @@ public class SQLBuilder {
         String whereSql = sqlWherePrefixBuilder
                 .append(StringUtils.join(whereConditionAllList, " AND "))
                 .toString();
-        System.out.println("sql: " + whereSql);
         return whereSql;
     }
 
