@@ -31,13 +31,14 @@ public class QueryExample {
      */
     public UserInfo queryForUserInfo(final String userName, final String passwd) {
         QueryVo<UserInfo> queryVo = ShamanUtils.newQueryVo(UserInfo.class);
-//        queryVo.setSelectColumnList("*")
-//                .setWhereColumnMap(UserInfo.USER_NAME, userName)
-//                .setWhereColumnMap(UserInfo.PASSWD, passwd);
+        queryVo.addColumn("*")
+                .addCondition(UserInfo.USER_NAME, userName)
+                .addCondition(UserInfo.PASSWD, passwd)
+                .addLimit(5);
 //        queryVo.setSelectColumnList("*")
 //                .setWhereColumnINMap(UserInfo.USER_NAME, Arrays.asList("zhangsan"));
-        queryVo.addColumn("*")
-                .addInCondition(UserInfo.ID, Arrays.asList(1));
+//        queryVo.addColumn("*")
+//                .addInCondition(UserInfo.ID, Arrays.asList(1));
         // or
 //        queryVo.setSelectColumnList(Arrays.asList("*"));
 //        queryVo.setWhereColumnMap(new LinkedHashMap<String, Object>() {

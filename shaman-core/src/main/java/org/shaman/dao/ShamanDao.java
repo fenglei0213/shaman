@@ -1,6 +1,5 @@
 package org.shaman.dao;
 
-import org.shaman.util.ReflectionUtils;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
 import org.springframework.util.CollectionUtils;
@@ -31,22 +30,22 @@ public class ShamanDao {
     /**
      * queryForCountInt queryForCountInt
      *
-     * @param queryCountVo
+     * @param queryVo
      * @return
      */
-    public int queryForCountInt(QueryCountVo queryCountVo) {
-        SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectCountTableSQL(queryCountVo);
+    public int queryForCountInt(QueryVo queryVo) {
+        SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryForInt(sqlSelectVo);
     }
 
     /**
      * queryForCountLong queryForCountLong
      *
-     * @param queryCountVo
+     * @param queryVo
      * @return
      */
-    public long queryForCountLong(QueryCountVo queryCountVo) {
-        SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectCountTableSQL(queryCountVo);
+    public long queryForCountLong(QueryVo queryVo) {
+        SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryForLong(sqlSelectVo);
     }
 

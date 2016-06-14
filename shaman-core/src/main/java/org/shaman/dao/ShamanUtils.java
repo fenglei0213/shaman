@@ -1,9 +1,7 @@
 package org.shaman.dao;
 
 
-import org.shaman.dao.vo.BaseVo;
 import org.shaman.dao.vo.DeleteVo;
-import org.shaman.dao.vo.QueryCountVo;
 import org.shaman.dao.vo.QueryVo;
 
 /**
@@ -11,12 +9,8 @@ import org.shaman.dao.vo.QueryVo;
  */
 public class ShamanUtils {
 
-    public static <T extends Object> QueryVo<T> newQueryVo(Class tableClazz){
+    public static <T> QueryVo<T> newQueryVo(Class tableClazz){
           return new QueryVo(tableClazz);
-    }
-
-    public static QueryCountVo newQueryCountVo(Class tableClazz){
-        return new QueryCountVo(tableClazz);
     }
 
     /**

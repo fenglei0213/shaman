@@ -2,6 +2,7 @@ package org.shaman.dao;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtil;
@@ -170,11 +171,16 @@ public class SQLBuilder {
         List<Object> argList = sqlSelectVo.getArgList();
         // get SQL meta data
         List<String> selectColumnList = queryVo.getSelectColumnList();
+        String countColumName = queryVo.getCountColumnName();
+        String countDistinctColumnName = queryVo.getCountDistinctColumnName();
         Class tableClazz = queryVo.getTableClazz();
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryVo.getWhereColumnMap();
         Map<String, List<Object>> whereColumnInMap = queryVo.getWhereColumnInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
+        ImmutablePair<Integer, Integer> limitPair = queryVo.getLimitPair();
+        int startOffset = limitPair.getLeft();
+        int endOffset = limitPair.getRight();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT ");
         StringBuilder sqlColumnBuilder = new StringBuilder();
@@ -182,46 +188,24 @@ public class SQLBuilder {
             if (distinctMap.containsKey(columnItem)) {
                 sqlColumnBuilder.append(" DISTINCT ");
             }
+            if (!StringUtils.isEmpty(countColumName)) {
+                sqlColumnBuilder.append(" COUNT(")
+                        .append(countColumName).append(") ");
+            }
+            if(!StringUtils.isEmpty(countDistinctColumnName)){
+                sqlColumnBuilder.append(" COUNT(DISTINCT ")
+                        .append(countColumName).append(") ");
+            }
             sqlColumnBuilder.append(columnItem).append(",");
         }
         String sqlColumnString = sqlColumnBuilder.toString();
         sqlColumnString = sqlColumnString.substring(0, sqlColumnString.lastIndexOf(","));
         // build SQL WHERE
-        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, whereColumnInMap, argList);
+        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
+                whereColumnInMap,
+                argList, startOffset, endOffset);
         // join SQL SELECT
         sqlBuilder.append(sqlColumnString);
-        // join SQL FROM
-        sqlBuilder.append(" FROM ").append(tableName);
-        // join SQL WHERE
-        sqlBuilder.append(sqlWhereString);
-        // SQLSelectVo set value
-        sqlSelectVo.setSql(sqlBuilder.toString());
-        sqlSelectVo.setTableClazz(tableClazz);
-        sqlSelectVo.setArgList(argList);
-        return sqlSelectVo;
-    }
-
-    /**
-     * buildSelectCountTableSQL buildSelectCountTableSQL
-     *
-     * @param queryCountVo
-     * @return
-     */
-    public static SQLSelectVo buildSelectCountTableSQL(QueryCountVo queryCountVo) {
-        // init SQLSelectVo
-        SQLSelectVo sqlSelectVo = new SQLSelectVo();
-        List<Object> argList = sqlSelectVo.getArgList();
-        // get SQL meta data
-        Class tableClazz = queryCountVo.getTableClazz();
-        String countColumName = queryCountVo.getCountColumnName();
-        String tableName = SQLBuilder.getTableName(tableClazz);
-        Map<String, Object> whereColumnMap = queryCountVo.getWhereColumnMap();
-        Map<String, List<Object>> whereColumnInMap = Maps.newHashMap();
-        // build SQL SELECT
-        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(")
-                .append(countColumName).append(")");
-        // build SQL WHERE
-        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap, whereColumnInMap, argList);
         // join SQL FROM
         sqlBuilder.append(" FROM ").append(tableName);
         // join SQL WHERE
@@ -241,7 +225,10 @@ public class SQLBuilder {
      * @param argList
      * @return
      */
-    public static String buildSQLWhere(Map<String, Object> whereColumnMap, Map<String, List<Object>> whereColumnInMap, List<Object> argList) {
+    public static String buildSQLWhere(Map<String, Object> whereColumnMap,
+                                       Map<String, List<Object>> whereColumnInMap,
+                                       List<Object> argList,
+                                       int startOffset, int endOffset) {
         List<String> whereConditionAllList = Lists.newArrayList();
         StringBuffer sqlWherePrefixBuilder = new StringBuffer(" WHERE ");
         // Common WHERE Condition
@@ -289,6 +276,8 @@ public class SQLBuilder {
         }
         String whereSql = sqlWherePrefixBuilder
                 .append(StringUtils.join(whereConditionAllList, " AND "))
+                .append(" LIMIT ").append(startOffset)
+                .append(",").append(endOffset)
                 .toString();
         return whereSql;
     }
