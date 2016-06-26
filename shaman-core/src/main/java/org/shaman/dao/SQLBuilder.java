@@ -179,8 +179,6 @@ public class SQLBuilder {
         Map<String, List<Object>> whereColumnInMap = queryVo.getWhereColumnInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
         ImmutablePair<Integer, Integer> limitPair = queryVo.getLimitPair();
-        int startOffset = limitPair.getLeft();
-        int endOffset = limitPair.getRight();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("SELECT ");
         StringBuilder sqlColumnBuilder = new StringBuilder();
@@ -192,7 +190,7 @@ public class SQLBuilder {
                 sqlColumnBuilder.append(" COUNT(")
                         .append(countColumName).append(") ");
             }
-            if(!StringUtils.isEmpty(countDistinctColumnName)){
+            if (!StringUtils.isEmpty(countDistinctColumnName)) {
                 sqlColumnBuilder.append(" COUNT(DISTINCT ")
                         .append(countColumName).append(") ");
             }
@@ -203,7 +201,7 @@ public class SQLBuilder {
         // build SQL WHERE
         String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                 whereColumnInMap,
-                argList, startOffset, endOffset);
+                argList, limitPair);
         // join SQL SELECT
         sqlBuilder.append(sqlColumnString);
         // join SQL FROM
@@ -228,9 +226,9 @@ public class SQLBuilder {
     public static String buildSQLWhere(Map<String, Object> whereColumnMap,
                                        Map<String, List<Object>> whereColumnInMap,
                                        List<Object> argList,
-                                       int startOffset, int endOffset) {
+                                       ImmutablePair<Integer, Integer> limitPair) {
         List<String> whereConditionAllList = Lists.newArrayList();
-        StringBuffer sqlWherePrefixBuilder = new StringBuffer(" WHERE ");
+        StringBuilder sqlWherePrefixBuilder = new StringBuilder(" WHERE ");
         // Common WHERE Condition
         StringBuilder sqlWhereBuilder = new StringBuilder();
         List<String> sqlWhereList = Lists.newArrayList();
@@ -274,12 +272,13 @@ public class SQLBuilder {
         if (!StringUtils.isEmpty(sqlWhereInItemBuilder)) {
             whereConditionAllList.add(sqlWhereInItemBuilder.toString());
         }
-        String whereSql = sqlWherePrefixBuilder
-                .append(StringUtils.join(whereConditionAllList, " AND "))
-                .append(" LIMIT ").append(startOffset)
-                .append(",").append(endOffset)
-                .toString();
-        return whereSql;
+        StringBuilder whereSql = sqlWherePrefixBuilder
+                .append(StringUtils.join(whereConditionAllList, " AND "));
+        if (limitPair != null) {
+            whereSql.append(" LIMIT ").append(limitPair.getLeft())
+                    .append(",").append(limitPair.getRight());
+        }
+        return whereSql.toString();
     }
 
 
