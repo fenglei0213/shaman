@@ -32,7 +32,6 @@ public class ShamanTemplate extends JdbcTemplate {
      * @throws DataAccessException
      */
     public <T> List<T> query(String sql, Object[] args, Class clazz) throws DataAccessException {
-        System.out.println("sql:" + sql);
         org.shaman.dao.ObjectRowMapper objectRowMapper = new org.shaman.dao.ObjectRowMapper(clazz);
         return super.query(sql, args, objectRowMapper);
     }
