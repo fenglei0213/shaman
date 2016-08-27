@@ -1,6 +1,8 @@
 package org.shaman.example;
 
 import org.shaman.dao.ShamanDao;
+import org.shaman.dao.ShamanUtils;
+import org.shaman.dao.vo.SQLUpdateVo;
 import org.shaman.example.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ public class UpdateExample {
     private ShamanDao shamanDao;
 
     public void updateUserInfo(UserInfo userInfo) {
+//        SQLUpdateVo sqlUpdateVo = ShamanUti
         shamanDao.updateObjectForTable(userInfo);
     }
 }

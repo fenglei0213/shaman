@@ -9,12 +9,8 @@ import java.util.List;
  */
 public class DeleteVo extends BaseVo {
 
-    private DeleteVo() {
-
-    }
-
     public DeleteVo(Class clazz) {
-        this.setTableClazz(clazz);
+        super.setTableClazz(clazz);
     }
 
     private String primaryKeyName;

@@ -23,6 +23,7 @@ public class UpdateExampleTest extends BaseTest {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(4L);
         userInfo.setNickName("rabbit");
+
         updateExample.updateUserInfo(userInfo);
     }
 }
