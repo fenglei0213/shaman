@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/init.xml"})
-@Transactional(transactionManager = "txManager")
+//@Transactional(transactionManager = "txManager")
 public class BaseTest {
 
     @Before

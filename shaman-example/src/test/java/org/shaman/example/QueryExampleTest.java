@@ -19,7 +19,7 @@ public class QueryExampleTest extends BaseTest{
 
     @Test
     public void testQueryForUserInfo() {
-        String userName = "zhangsan";
+        String userName = "lisi";
         String passwdOrg = "123456";
         String passwd = MD5Util.MD5(passwdOrg);
 //        System.out.println(passwd);
