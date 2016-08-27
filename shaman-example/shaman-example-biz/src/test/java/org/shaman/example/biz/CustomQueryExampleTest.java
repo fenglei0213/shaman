@@ -1,4 +1,4 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 /**
  * Created by fenglei on 2016/6/10.

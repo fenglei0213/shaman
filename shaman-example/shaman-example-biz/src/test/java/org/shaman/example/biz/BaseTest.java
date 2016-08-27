@@ -1,9 +1,9 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.shaman.example.db.H2DataBase;
+import org.shaman.example.biz.db.H2DataBase;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;

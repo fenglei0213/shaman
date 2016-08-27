@@ -1,8 +1,8 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 import org.junit.Test;
-import org.shaman.example.utils.MD5Util;
-import org.shaman.example.vo.UserInfo;
+import org.shaman.example.biz.utils.MD5Util;
+import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -35,6 +35,11 @@
                 <artifactId>shaman-core</artifactId>
                 <version>${shaman.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.shaman</groupId>
+                <artifactId>shaman-example-biz</artifactId>
+                <version>${shaman.version}</version>
+            </dependency>
             <!-- spring begin -->
             <dependency>
                 <groupId>org.springframework</groupId>
