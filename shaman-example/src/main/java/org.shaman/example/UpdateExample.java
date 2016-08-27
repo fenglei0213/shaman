@@ -1,5 +1,10 @@
 package org.shaman.example;
 
+import org.shaman.dao.ShamanDao;
+import org.shaman.example.vo.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,4 +12,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UpdateExample {
+
+    private static final Logger logger = LoggerFactory.getLogger(UpdateExample.class);
+
+    @Autowired
+    private ShamanDao shamanDao;
+
+    public void updateUserInfo(UserInfo userInfo) {
+        shamanDao.updateObjectForTable(userInfo);
+    }
 }

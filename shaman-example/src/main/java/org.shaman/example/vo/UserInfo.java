@@ -26,6 +26,8 @@ public class UserInfo {
     private String userName;
     @FieldMeta
     private String passwd;
+    @FieldMeta
+    private String nickName;
 
     public Long getId() {
         return id;
@@ -49,6 +51,14 @@ public class UserInfo {
 
     public void setPasswd(String passwd) {
         this.passwd = passwd;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     @Override
