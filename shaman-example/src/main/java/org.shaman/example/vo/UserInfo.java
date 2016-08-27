@@ -11,7 +11,7 @@ public class UserInfo {
     public static final String USER_NAME = "user_name";
     public static final String PASSWD = "passwd";
 
-    public UserInfo(){
+    public UserInfo() {
 
     }
 
@@ -20,7 +20,7 @@ public class UserInfo {
         this.setPasswd(passwd);
     }
 
-    @FieldMeta
+    @FieldMeta(id = true)
     private Long id;
     @FieldMeta
     private String userName;
