@@ -1,9 +1,9 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 import org.shaman.dao.ShamanDao;
 import org.shaman.dao.ShamanUtils;
 import org.shaman.dao.vo.DeleteVo;
-import org.shaman.example.vo.UserInfo;
+import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

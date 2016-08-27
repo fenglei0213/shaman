@@ -1,4 +1,4 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 import org.springframework.stereotype.Service;
 

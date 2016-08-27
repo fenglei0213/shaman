@@ -1,4 +1,4 @@
-package org.shaman.example.db;
+package org.shaman.example.biz.db;
 
 import org.h2.tools.Server;
 

@@ -1,4 +1,4 @@
-package org.shaman.example.utils;
+package org.shaman.example.biz.utils;
 
 import java.security.MessageDigest;
 

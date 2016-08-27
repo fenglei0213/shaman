@@ -1,4 +1,4 @@
-package org.shaman.example.vo;
+package org.shaman.example.biz.vo;
 
 import org.shaman.dao.annotation.FieldMeta;
 
