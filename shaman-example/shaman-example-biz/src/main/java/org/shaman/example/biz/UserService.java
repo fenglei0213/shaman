@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by fenglei on 2016/8/27.
@@ -20,6 +21,7 @@ public class UserService {
     @Autowired
     private ShamanDao shamanDao;
 
+    @Transactional
     public boolean login(String userName, String passwd) {
         QueryVo<UserInfo> queryVo = ShamanUtils.newQueryVo(UserInfo.class);
         queryVo.addColumn("*")

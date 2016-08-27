@@ -43,9 +43,13 @@ public class UserController {
     @RequestMapping
     public WebResponse login(UserInfoVo userInfoVo) {
         WebResponse webResponse = new WebResponse();
+        boolean flag = true;
+        try {
+            flag = userService.login(userInfoVo.getUserName(),
+                    userInfoVo.getPasswd());
+        } catch (Exception e) {
 
-        boolean flag = userService.login(userInfoVo.getUserName(),
-                userInfoVo.getPasswd());
+        }
         webResponse.setData(flag);
         return webResponse;
     }
