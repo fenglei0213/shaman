@@ -198,16 +198,19 @@ public class SQLBuilder {
         }
         String sqlColumnString = sqlColumnBuilder.toString();
         sqlColumnString = sqlColumnString.substring(0, sqlColumnString.lastIndexOf(","));
-        // build SQL WHERE
-        String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
-                whereColumnInMap,
-                argList, limitPair);
+
         // join SQL SELECT
         sqlBuilder.append(sqlColumnString);
         // join SQL FROM
         sqlBuilder.append(" FROM ").append(tableName);
         // join SQL WHERE
-        sqlBuilder.append(sqlWhereString);
+        if (!CollectionUtils.isEmpty(whereColumnMap)) {
+            // build SQL WHERE
+            String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
+                    whereColumnInMap,
+                    argList, limitPair);
+            sqlBuilder.append(sqlWhereString);
+        }
         // SQLSelectVo set value
         sqlSelectVo.setSql(sqlBuilder.toString());
         sqlSelectVo.setTableClazz(tableClazz);
