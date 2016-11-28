@@ -1,7 +1,9 @@
 package org.shaman.dao;
 
+import org.shaman.exception.ShamanArgsException;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -110,12 +112,19 @@ public class ShamanDao {
 
     /**
      * insertObjectBatch insertObjectBatch
+     *
      * @param objectList
      * @param <T>
      */
     public <T> void insertObjectBatch(List<T> objectList) {
-        if(CollectionUtils.isEmpty(objectList)){
+        if (CollectionUtils.isEmpty(objectList)) {
             return;
+        }
+        // List is not empty,But each item is empty
+        for (T item : objectList) {
+            if (item == null) {
+                throw new ShamanArgsException("insertObjectBatch args objectList contains NULL item");
+            }
         }
         SQLInsertBatchVo sqlInsertBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList);
         shamanTemplate.insertBatch(sqlInsertBatchVo);
