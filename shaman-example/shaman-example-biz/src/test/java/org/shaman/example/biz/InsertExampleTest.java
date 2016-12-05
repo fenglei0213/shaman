@@ -1,4 +1,4 @@
-package org.shaman.example;
+package org.shaman.example.biz;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
@@ -6,9 +6,9 @@ import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.shaman.example.utils.MD5Util;
-import org.shaman.example.vo.PollutionStatistic;
-import org.shaman.example.vo.UserInfo;
+import org.shaman.example.BaseTest;
+import org.shaman.example.biz.utils.MD5Util;
+import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,31 +48,6 @@ public class InsertExampleTest extends BaseTest {
         UserInfo userInfoTwo = new UserInfo("zhaoliu", MD5Util.MD5("123456"));
         List<UserInfo> userInfoList = Lists.newArrayList();
         insertExample.insertBatchForUserInfo(userInfoList);
-    }
-
-    @Test
-    public void testInsertBatchForPS() {
-        String testFilePath = "D:\\workspace\\github\\shaman\\quality_dump";
-        File testFile = new File(testFilePath);
-        List<String> lines = null;
-        try {
-            lines = Files.readLines(testFile, Charsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        List<PollutionStatistic> pollutionStatisticList = Lists.newArrayList();
-        for (String line : lines) {
-            List<String> ret = Splitter.on("\t").splitToList(line);
-            PollutionStatistic pollutionStatistic = new PollutionStatistic();
-            pollutionStatistic.setArticleId(Long.valueOf(ret.get(0)));
-            pollutionStatistic.setAppId(Long.valueOf(ret.get(1)));
-            pollutionStatistic.setUrl(ret.get(2));
-            pollutionStatistic.setArticleTitle(ret.get(3));
-            pollutionStatistic.setStatus(Integer.valueOf(ret.get(4)));
-            pollutionStatistic.setCreatedAt(ret.get(5));
-            pollutionStatisticList.add(pollutionStatistic);
-        }
-        insertExample.insertBatchForPS(pollutionStatisticList);
     }
 
     /**

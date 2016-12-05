@@ -30,6 +30,8 @@ public abstract class BaseSetter {
             pst.setInt(i, (Integer) objValue);
         } else if (elemType.indexOf("Long") != -1 || elemType.indexOf("long") != -1) {
             pst.setLong(i, (Long) objValue);
+        } else if (elemType.indexOf("Double") != -1 || elemType.indexOf("double") != -1) {
+            pst.setDouble(i, (Double) objValue);
         }
     }
 
