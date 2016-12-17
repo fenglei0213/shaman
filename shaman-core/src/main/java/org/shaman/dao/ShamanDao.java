@@ -16,6 +16,15 @@ public class ShamanDao {
     private ShamanTemplate shamanTemplate;
 
     /**
+     * execute execute
+     *
+     * @param sql
+     */
+    public void execute(String sql) {
+        shamanTemplate.execute(sql);
+    }
+
+    /**
      * query query
      *
      * @param sql
