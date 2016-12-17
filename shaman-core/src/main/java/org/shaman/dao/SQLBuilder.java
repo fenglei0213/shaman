@@ -298,19 +298,30 @@ public class SQLBuilder {
         String tableName = SQLBuilder.getTableName(tableClazz);
         String primaryKeyName = deleteVo.getPrimaryKeyName();
         List<Long> idList = deleteVo.getIdList();
+        Map<String, Object> whereColumnMap = deleteVo.getWhereColumnMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("DELETE ");
+        StringBuilder sqlWhereBuilder = new StringBuilder();
         // build SQL WHERE
-        StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
-        sqlWhereBuilder.append(primaryKeyName).append(" IN (");
-        // build SQL IN
-        StringBuilder sqlInBuilder = new StringBuilder();
-        for (Number number : idList) {
-            sqlInBuilder.append(number).append(",");
+
+        List<String> whereItemList = Lists.newArrayList();
+        if (!StringUtils.isEmpty(primaryKeyName)) {
+            StringBuilder sqlPrimaryKeyWhereBuilder = new StringBuilder();
+            sqlPrimaryKeyWhereBuilder.append(primaryKeyName).append(" IN (");
+            // build SQL primary id IN
+            String primaryIdListString = StringUtils.join(idList, ",");
+            sqlWhereBuilder.append(primaryIdListString).append(")");
+            whereItemList.add(sqlPrimaryKeyWhereBuilder.toString());
         }
-        String sqlInBuilderString = sqlInBuilder.toString();
-        sqlInBuilderString = sqlInBuilderString.substring(0, sqlInBuilderString.lastIndexOf(","));
-        sqlWhereBuilder.append(sqlInBuilderString).append(")");
+        if (!CollectionUtils.isEmpty(whereColumnMap)) {
+            String sqlWhereColumnMapString = SQLBuilder.buildWhereSql(whereColumnMap);
+            whereItemList.add(sqlWhereColumnMapString);
+        }
+        if (!StringUtils.isEmpty(primaryKeyName) || !CollectionUtils.isEmpty(whereColumnMap)) {
+            sqlWhereBuilder.append(" WHERE ");
+            String whereItemListString = StringUtils.join(whereItemList, " AND ");
+            sqlWhereBuilder.append(whereItemListString);
+        }
         // join SQL FROM
         sqlBuilder.append(" FROM ").append(tableName);
         // join SQL WHERE
@@ -342,5 +353,30 @@ public class SQLBuilder {
         char[] cs = name.toCharArray();
         cs[0] -= 32;
         return String.valueOf(cs);
+    }
+
+    /**
+     * buildWhereSql buildWhereSql
+     *
+     * @param whereColumnInMap
+     */
+    private static String buildWhereSql(Map<String, Object> whereColumnInMap) {
+        List<String> whereItemList = Lists.newArrayList();
+        for (Map.Entry<String, Object> mapEntry : whereColumnInMap.entrySet()) {
+            StringBuilder sqlItemBuilder = new StringBuilder();
+            String key = mapEntry.getKey();
+            Object value = mapEntry.getValue();
+            sqlItemBuilder.append(key).append("=");
+            if (value instanceof String) {
+                sqlItemBuilder.append("\"")
+                        .append(value)
+                        .append("\"");
+            } else {
+                sqlItemBuilder.append(value.toString());
+            }
+            whereItemList.add(sqlItemBuilder.toString());
+        }
+        String whereSql = StringUtils.join(whereItemList, " AND ");
+        return whereSql;
     }
 }
