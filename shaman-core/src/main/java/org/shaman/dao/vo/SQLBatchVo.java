@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by fenglei on 2016/6/11.
  */
-public class SQLInsertBatchVo extends SQLBaseVo{
+public class SQLBatchVo extends SQLBaseVo {
 
     private List<Map<Field, Object>> sqlSetList = Lists.newArrayList();
 

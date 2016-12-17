@@ -3,7 +3,6 @@ package org.shaman.dao;
 import org.shaman.exception.ShamanArgsException;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -125,18 +124,38 @@ public class ShamanDao {
      * @param objectList
      * @param <T>
      */
-    public <T> void insertObjectBatch(List<T> objectList) {
+    public <T> void insertBatch(List<T> objectList) {
         if (CollectionUtils.isEmpty(objectList)) {
             return;
         }
         // List is not empty,But each item is empty
         for (T item : objectList) {
             if (item == null) {
-                throw new ShamanArgsException("insertObjectBatch args objectList contains NULL item");
+                throw new ShamanArgsException("insertBatch args objectList contains NULL item");
             }
         }
-        SQLInsertBatchVo sqlInsertBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList);
-        shamanTemplate.insertBatch(sqlInsertBatchVo);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildBatchTableSQL(objectList);
+        shamanTemplate.insertBatch(sqlBatchVo);
+    }
+
+    /**
+     * updateBatch updateBatch
+     *
+     * @param objectList
+     * @param <T>
+     */
+    public <T> void updateBatch(List<T> objectList) {
+        if (CollectionUtils.isEmpty(objectList)) {
+            return;
+        }
+        // List is not empty,But each item is empty
+        for (T item : objectList) {
+            if (item == null) {
+                throw new ShamanArgsException("updateBatch args objectList contains NULL item");
+            }
+        }
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildBatchTableSQL(objectList);
+        shamanTemplate.updateBatch(sqlBatchVo);
     }
 
     /**

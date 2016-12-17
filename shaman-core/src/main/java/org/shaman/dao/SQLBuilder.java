@@ -1,7 +1,6 @@
 package org.shaman.dao;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
@@ -86,16 +85,16 @@ public class SQLBuilder {
      * @param objectList
      * @return
      */
-    public static <T> SQLInsertBatchVo buildInsertBatchTableSQL(List<T> objectList) {
-        SQLInsertBatchVo sqlInsertBatchVo = new SQLInsertBatchVo();
-        List<Map<Field, Object>> sqlSetList = sqlInsertBatchVo.getSqlSetList();
+    public static <T> SQLBatchVo buildBatchTableSQL(List<T> objectList) {
+        SQLBatchVo sqlBatchVo = new SQLBatchVo();
+        List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
             SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object);
             sqlSetList.add(sqlInsertVo.getSqlSetMap());
-            sqlInsertBatchVo.setSql(sqlInsertVo.getSql());
+            sqlBatchVo.setSql(sqlInsertVo.getSql());
         }
-        return sqlInsertBatchVo;
+        return sqlBatchVo;
     }
 
     /**

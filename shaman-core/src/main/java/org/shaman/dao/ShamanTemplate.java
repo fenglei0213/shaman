@@ -2,11 +2,9 @@ package org.shaman.dao;
 
 import org.shaman.dao.setter.InsertBatchSetter;
 import org.shaman.dao.setter.InsertSetter;
+import org.shaman.dao.setter.UpdateBatchSetter;
 import org.shaman.dao.setter.UpdateSetter;
-import org.shaman.dao.vo.SQLInsertBatchVo;
-import org.shaman.dao.vo.SQLInsertVo;
-import org.shaman.dao.vo.SQLSelectVo;
-import org.shaman.dao.vo.SQLUpdateVo;
+import org.shaman.dao.vo.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -71,11 +69,28 @@ public class ShamanTemplate extends JdbcTemplate {
         super.update(sql, insertSetter);
     }
 
-    public <T> void insertBatch(SQLInsertBatchVo sqlInsertBatchVo) {
-        String sql = sqlInsertBatchVo.getSql();
-        List<Map<Field, Object>> sqlSetList = sqlInsertBatchVo.getSqlSetList();
+    /**
+     * insertBatch insertBatch
+     *
+     * @param sqlBatchVo
+     */
+    public void insertBatch(SQLBatchVo sqlBatchVo) {
+        String sql = sqlBatchVo.getSql();
+        List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         InsertBatchSetter insertBatchSetter = new InsertBatchSetter(sqlSetList);
         super.batchUpdate(sql, insertBatchSetter);
+    }
+
+    /**
+     * updateBatch updateBatch
+     *
+     * @param sqlBatchVo
+     */
+    public void updateBatch(SQLBatchVo sqlBatchVo) {
+        String sql = sqlBatchVo.getSql();
+        List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
+        UpdateBatchSetter updateBatchSetter = new UpdateBatchSetter(sqlSetList);
+        super.batchUpdate(sql, updateBatchSetter);
     }
 
     /**
@@ -85,10 +100,6 @@ public class ShamanTemplate extends JdbcTemplate {
      */
     public void delete(String deleteSQL) {
         super.update(deleteSQL);
-    }
-
-    public <T> void delete() {
-
     }
 
     /**
