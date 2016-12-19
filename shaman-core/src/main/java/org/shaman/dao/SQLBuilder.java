@@ -299,6 +299,7 @@ public class SQLBuilder {
         String primaryKeyName = deleteVo.getPrimaryKeyName();
         List<Long> idList = deleteVo.getIdList();
         Map<String, Object> whereColumnMap = deleteVo.getWhereColumnMap();
+        Map<String, List<Object>> whereColumnInMap = deleteVo.getWhereColumnInMap();
         // build SQL SELECT
         StringBuilder sqlBuilder = new StringBuilder("DELETE ");
         StringBuilder sqlWhereBuilder = new StringBuilder();
@@ -316,6 +317,10 @@ public class SQLBuilder {
         if (!CollectionUtils.isEmpty(whereColumnMap)) {
             String sqlWhereColumnMapString = SQLBuilder.buildWhereSql(whereColumnMap);
             whereItemList.add(sqlWhereColumnMapString);
+        }
+        if (!CollectionUtils.isEmpty(whereColumnInMap)) {
+            String sqlWhereColumnInMapString = SQLBuilder.buildWhereInSql(whereColumnInMap);
+            whereItemList.add(sqlWhereColumnInMapString);
         }
         if (!StringUtils.isEmpty(primaryKeyName) || !CollectionUtils.isEmpty(whereColumnMap)) {
             sqlWhereBuilder.append(" WHERE ");
@@ -358,11 +363,67 @@ public class SQLBuilder {
     /**
      * buildWhereSql buildWhereSql
      *
+     * @param whereColumnMap
+     */
+    private static String buildWhereSql(Map<String, Object> whereColumnMap) {
+        List<String> whereItemList = SQLBuilder.buildWhereItemList(whereColumnMap);
+        String whereSql = StringUtils.join(whereItemList, " AND ");
+        return whereSql;
+    }
+
+    /**
+     * buildWhereInSql buildWhereInSql
+     *
      * @param whereColumnInMap
      */
-    private static String buildWhereSql(Map<String, Object> whereColumnInMap) {
+    private static String buildWhereInSql(Map<String, List<Object>> whereColumnInMap) {
+        List<String> whereItemList = SQLBuilder.buildWhereInItemList(whereColumnInMap);
+        String whereSql = StringUtils.join(whereItemList, " AND ");
+        return whereSql;
+    }
+
+    /**
+     * buildWhereInItemList buildWhereInItemList
+     *
+     * @param whereColumnInMap
+     * @return
+     */
+    private static List<String> buildWhereInItemList(Map<String, List<Object>> whereColumnInMap) {
         List<String> whereItemList = Lists.newArrayList();
-        for (Map.Entry<String, Object> mapEntry : whereColumnInMap.entrySet()) {
+        for (Map.Entry<String, List<Object>> mapEntry : whereColumnInMap.entrySet()) {
+            StringBuilder sqlItemBuilder = new StringBuilder();
+            String key = mapEntry.getKey();
+            List<Object> objectList = mapEntry.getValue();
+            sqlItemBuilder.append(key).append(" IN (");
+
+            List<String> objectStringList = Lists.newArrayList();
+            for (Object obj : objectList) {
+                StringBuilder objItemBuilder = new StringBuilder();
+                if (obj instanceof String) {
+                    objItemBuilder.append("\"")
+                            .append(obj)
+                            .append("\"");
+                } else {
+                    objItemBuilder.append(obj.toString());
+                }
+                objectStringList.add(objItemBuilder.toString());
+            }
+            String objectStringSQL = StringUtils.join(objectStringList, ",");
+            sqlItemBuilder.append(objectStringSQL).append(")");
+            whereItemList.add(sqlItemBuilder.toString());
+        }
+        return whereItemList;
+    }
+
+    /**
+     * buildWhereItemList buildWhereItemList
+     *
+     * @param whereColumnMap
+     * @return
+     */
+    private static List<String> buildWhereItemList(Map<String, Object> whereColumnMap) {
+        List<String> whereItemList = Lists.newArrayList();
+        for (Map.Entry<String, Object> mapEntry : whereColumnMap.entrySet()) {
             StringBuilder sqlItemBuilder = new StringBuilder();
             String key = mapEntry.getKey();
             Object value = mapEntry.getValue();
@@ -376,7 +437,6 @@ public class SQLBuilder {
             }
             whereItemList.add(sqlItemBuilder.toString());
         }
-        String whereSql = StringUtils.join(whereItemList, " AND ");
-        return whereSql;
+        return whereItemList;
     }
 }

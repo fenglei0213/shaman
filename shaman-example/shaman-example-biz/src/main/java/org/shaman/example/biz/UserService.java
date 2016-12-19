@@ -1,7 +1,7 @@
 package org.shaman.example.biz;
 
 import org.shaman.dao.ShamanDao;
-import org.shaman.dao.ShamanUtils;
+import org.shaman.dao.ShamanVos;
 import org.shaman.dao.vo.QueryVo;
 import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class UserService {
 
     @Transactional
     public boolean login(String userName, String passwd) {
-        QueryVo<UserInfo> queryVo = ShamanUtils.newQueryVo(UserInfo.class);
+        QueryVo<UserInfo> queryVo = ShamanVos.newQueryVo(UserInfo.class);
         queryVo.addColumn("*")
                 .addCondition(UserInfo.USER_NAME, userName)
                 .addCondition(UserInfo.PASSWD, passwd);

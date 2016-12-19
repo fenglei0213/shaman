@@ -111,8 +111,11 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
-     * setWhereColumn setWhereColumn
+     * addInCondition addInCondition
      *
+     * 此方法有问题.会和 Object... 方法冲突,认为List是一个Object
+     *
+     * @deprecated
      * @param key
      * @param inList
      * @return
@@ -123,7 +126,7 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
-     * setWhereColumn setWhereColumn
+     * addInCondition addInCondition
      *
      * @param key
      * @param objects

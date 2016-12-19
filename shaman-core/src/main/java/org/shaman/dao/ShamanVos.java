@@ -7,7 +7,7 @@ import org.shaman.dao.vo.QueryVo;
 /**
  * Created by fenglei on 2016/3/4.
  */
-public class ShamanUtils {
+public class ShamanVos {
 
     /**
      * newQueryVo newQueryVo

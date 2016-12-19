@@ -3,6 +3,7 @@ package org.shaman.dao.vo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public class DeleteVo extends BaseVo {
     private List idList = Lists.newArrayList();
 
     private Map<String, Object> whereColumnMap = Maps.newLinkedHashMap();
+
+    private Map<String, List<Object>> whereColumnInMap = Maps.newLinkedHashMap();
 
     public List<Long> getIdList() {
         return idList;
@@ -43,6 +46,10 @@ public class DeleteVo extends BaseVo {
         return whereColumnMap;
     }
 
+    public Map<String, List<Object>> getWhereColumnInMap() {
+        return whereColumnInMap;
+    }
+
     /**
      * addCondition addCondition
      *
@@ -61,6 +68,18 @@ public class DeleteVo extends BaseVo {
      */
     public DeleteVo addCondition(String key, Object value) {
         this.whereColumnMap.put(key, value);
+        return this;
+    }
+
+    /**
+     * addInCondition addInCondition
+     *
+     * @param key
+     * @param objects
+     * @return
+     */
+    public DeleteVo addInCondition(String key, Object... objects) {
+        this.whereColumnInMap.put(key, Arrays.asList(objects));
         return this;
     }
 }

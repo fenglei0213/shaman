@@ -1,7 +1,7 @@
 package org.shaman.example.biz;
 
 import org.shaman.dao.ShamanDao;
-import org.shaman.dao.ShamanUtils;
+import org.shaman.dao.ShamanVos;
 import org.shaman.dao.vo.DeleteVo;
 import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class DeleteExample {
     private ShamanDao shamanDao;
 
     public void deleteForUserInfo(Long id) {
-        DeleteVo deleteVo = ShamanUtils.newDeleteVo(UserInfo.class);
+        DeleteVo deleteVo = ShamanVos.newDeleteVo(UserInfo.class);
         deleteVo.setPrimaryKeyName("id");
         deleteVo.setIdList(Arrays.asList(id));
         shamanDao.deleteRow(deleteVo);
