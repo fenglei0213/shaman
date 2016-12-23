@@ -35,7 +35,7 @@ public class InsertExample {
      * @param userInfoList
      */
     public void insertBatchForUserInfo(List<UserInfo> userInfoList) {
-        shamanDao.insertObjectBatch(userInfoList);
+        shamanDao.insertBatch(userInfoList);
     }
 
 

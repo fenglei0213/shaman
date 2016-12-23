@@ -5,7 +5,7 @@ package org.shaman.dao.vo;
  */
 public abstract class SQLBaseVo {
 
-    private String sql="";
+    private String sql = "";
 
     public String getSql() {
         return sql;
