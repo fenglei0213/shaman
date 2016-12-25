@@ -168,6 +168,26 @@ public class ShamanDao {
         shamanTemplate.delete(deleteSQL);
     }
 
+    /**
+     * dropTable dropTable
+     *
+     * @param tableName
+     */
+    public void dropTable(String tableName) {
+        String dropTableSQL = SQLBuilder.buildDropTableSQL(tableName);
+        shamanTemplate.execute(dropTableSQL);
+    }
+
+    /**
+     * truncateTable truncateTable
+     *
+     * @param tableName
+     */
+    public void truncateTable(String tableName) {
+        String truncateTableSQL = SQLBuilder.buildTruncateTableSQL(tableName);
+        shamanTemplate.execute(truncateTableSQL);
+    }
+
     public void setShamanTemplate(ShamanTemplate shamanTemplate) {
         this.shamanTemplate = shamanTemplate;
     }

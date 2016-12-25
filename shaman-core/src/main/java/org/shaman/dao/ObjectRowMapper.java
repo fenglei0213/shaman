@@ -1,7 +1,7 @@
 package org.shaman.dao;
 
 import org.shaman.dao.annotation.FieldMeta;
-import org.shaman.util.HumpUtil;
+import org.shaman.util.HumpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
@@ -46,7 +46,7 @@ public class ObjectRowMapper implements RowMapper {
                     FieldMeta fieldMeta = field.getAnnotation(FieldMeta.class);
                     if (fieldMeta != null) {
                         String fieldName = field.getName();
-                        underscoreName = HumpUtil.underscoreName(fieldName).toLowerCase();
+                        underscoreName = HumpUtils.underscoreName(fieldName).toLowerCase();
                         rs.findColumn(underscoreName);
                     }
                 } catch (Exception e) {
