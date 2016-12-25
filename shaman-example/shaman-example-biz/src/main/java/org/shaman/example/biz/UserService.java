@@ -21,7 +21,7 @@ public class UserService {
     @Autowired
     private ShamanDao shamanDao;
 
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public boolean login(String userName, String passwd) {
         QueryVo<UserInfo> queryVo = ShamanVos.newQueryVo(UserInfo.class);
         queryVo.addColumn("*")
