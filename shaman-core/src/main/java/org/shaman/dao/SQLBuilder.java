@@ -212,7 +212,7 @@ public class SQLBuilder {
                 if (fieldMeta.id()) {
                     // different
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
-                    sqlSetMap.put(field, getMethodValue);
+                    sqlWhereMap.put(field, getMethodValue);
                 } else {
                     sqlSetBuilder.append(tableFieldName).append("=?,");
                     sqlSetMap.put(field, getMethodValue);
@@ -230,7 +230,8 @@ public class SQLBuilder {
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());
         sqlUpdateVo.setSqlSetMap(sqlSetMap);
-        sqlUpdateVo.setSqlWhereMap(sqlWhereMap);
+        // different
+        sqlSetMap.putAll(sqlWhereMap);
         return sqlUpdateVo;
     }
 
