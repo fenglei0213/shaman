@@ -134,7 +134,7 @@ public class ShamanDao {
                 throw new ShamanArgsException("insertBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildBatchTableSQL(objectList);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList);
         shamanTemplate.insertBatch(sqlBatchVo);
     }
 
@@ -154,7 +154,7 @@ public class ShamanDao {
                 throw new ShamanArgsException("updateBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildBatchTableSQL(objectList);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList);
         shamanTemplate.updateBatch(sqlBatchVo);
     }
 

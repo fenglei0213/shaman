@@ -85,7 +85,7 @@ public class SQLBuilder {
      * @param objectList
      * @return
      */
-    public static <T> SQLBatchVo buildBatchTableSQL(List<T> objectList) {
+    public static <T> SQLBatchVo buildInsertBatchTableSQL(List<T> objectList) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
@@ -93,6 +93,24 @@ public class SQLBuilder {
             SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object);
             sqlSetList.add(sqlInsertVo.getSqlSetMap());
             sqlBatchVo.setSql(sqlInsertVo.getSql());
+        }
+        return sqlBatchVo;
+    }
+
+    /**
+     * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
+     *
+     * @param objectList
+     * @return
+     */
+    public static <T> SQLBatchVo buildUpdateBatchTableSQL(List<T> objectList) {
+        SQLBatchVo sqlBatchVo = new SQLBatchVo();
+        List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
+        // Performance Optimization Here
+        for (T object : objectList) {
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateTableSQL(object);
+            sqlSetList.add(sqlUpdateVo.getSqlSetMap());
+            sqlBatchVo.setSql(sqlUpdateVo.getSql());
         }
         return sqlBatchVo;
     }
