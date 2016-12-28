@@ -151,7 +151,7 @@ public class SQLBuilder {
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 if (fieldMeta.id()) {
                     // support composite keys
-                    sqlWhereBuilder.append(tableFieldName).append("=? AND ");
+                    sqlWhereBuilder.append(tableFieldName).append("=? ");
                     sqlWhereMap.put(field, getMethodValue);
                 } else {
                     sqlSetBuilder.append(tableFieldName).append("=?,");
@@ -167,7 +167,6 @@ public class SQLBuilder {
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
         //
         String sqlWhereString = sqlWhereBuilder.toString();
-        sqlWhereString = sqlWhereString.substring(0, sqlWhereString.lastIndexOf("AND"));
         //
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereString);
         sqlUpdateVo.setSql(sqlBuilder.toString());
