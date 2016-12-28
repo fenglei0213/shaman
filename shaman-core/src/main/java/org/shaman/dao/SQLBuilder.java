@@ -211,8 +211,8 @@ public class SQLBuilder {
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 if (fieldMeta.id()) {
                     // different
-                    sqlWhereBuilder.append(tableFieldName).append("=").append(getMethodValue);
-                    sqlWhereMap.put(field, getMethodValue);
+                    sqlWhereBuilder.append(tableFieldName).append("=? ");
+                    sqlSetMap.put(field, getMethodValue);
                 } else {
                     sqlSetBuilder.append(tableFieldName).append("=?,");
                     sqlSetMap.put(field, getMethodValue);
