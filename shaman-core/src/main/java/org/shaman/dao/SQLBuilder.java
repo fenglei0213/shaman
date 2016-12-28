@@ -167,7 +167,11 @@ public class SQLBuilder {
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
         //
         String sqlWhereString = sqlWhereBuilder.toString();
-        sqlWhereString = sqlWhereString.substring(0, sqlWhereString.lastIndexOf("AND"));
+        if (sqlWhereString.equals(" WHERE ")) {
+            sqlWhereString = "";
+        } else {
+            sqlWhereString = sqlWhereString.substring(0, sqlWhereString.lastIndexOf("AND"));
+        }
         //
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereString);
         sqlUpdateVo.setSql(sqlBuilder.toString());
