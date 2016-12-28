@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
-import org.shaman.util.HumpUtil;
+import org.shaman.util.HumpUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
@@ -53,7 +53,7 @@ public class SQLBuilder {
                 Object getMethodValue = getMethod.invoke(obj);
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 // if have value,set column in SQL
-                String tableFieldName = HumpUtil.underscoreName(fieldName);
+                String tableFieldName = HumpUtils.underscoreName(fieldName);
                 sqlColumnBuilder.append(tableFieldName).append(",");
                 sqlQuestionBuilder.append("?,");
                 sqlSetMap.put(field, getMethodValue);
@@ -144,7 +144,7 @@ public class SQLBuilder {
                 Assert.notNull(fieldMeta, "Member Variable has not FieldMeta Annotation");
                 hasAnnotation = true;
                 String fieldName = field.getName();
-                String tableFieldName = HumpUtil.underscoreName(fieldName);
+                String tableFieldName = HumpUtils.underscoreName(fieldName);
                 String getFieldName = "get" + SQLBuilder.captureName(fieldName);
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
@@ -362,7 +362,7 @@ public class SQLBuilder {
      */
     public static String getTableName(Class clazz) {
         String clazzName = clazz.getSimpleName();
-        String tableName = HumpUtil.underscoreName(clazzName);
+        String tableName = HumpUtils.underscoreName(clazzName);
         return tableName;
     }
 
@@ -456,5 +456,27 @@ public class SQLBuilder {
             whereItemList.add(sqlItemBuilder.toString());
         }
         return whereItemList;
+    }
+
+    /**
+     * buildDropTableSQL buildDropTableSQL
+     *
+     * @param tableName
+     * @return
+     */
+    public static String buildDropTableSQL(String tableName) {
+        String dropTableSQL = "DROP TABLE ".concat(tableName);
+        return dropTableSQL;
+    }
+
+    /**
+     * buildTruncateTableSQL buildTruncateTableSQL
+     *
+     * @param tableName
+     * @return
+     */
+    public static String buildTruncateTableSQL(String tableName) {
+        String truncateTableSQL = "TRUNCATE TABLE ".concat(tableName);
+        return truncateTableSQL;
     }
 }
