@@ -108,7 +108,7 @@ public class SQLBuilder {
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateTableSQL(object);
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object);
             sqlSetList.add(sqlUpdateVo.getSqlSetMap());
             sqlBatchVo.setSql(sqlUpdateVo.getSql());
         }
@@ -152,6 +152,66 @@ public class SQLBuilder {
                 if (fieldMeta.id()) {
                     // support composite keys
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
+                    sqlWhereMap.put(field, getMethodValue);
+                } else {
+                    sqlSetBuilder.append(tableFieldName).append("=?,");
+                    sqlSetMap.put(field, getMethodValue);
+                }
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
+        //
+        String sqlSetString = sqlSetBuilder.toString();
+        sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
+        //
+        //
+        sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
+        sqlUpdateVo.setSql(sqlBuilder.toString());
+        sqlUpdateVo.setSqlSetMap(sqlSetMap);
+        sqlUpdateVo.setSqlWhereMap(sqlWhereMap);
+        return sqlUpdateVo;
+    }
+
+
+    /**
+     * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
+     * <p>
+     * support composite keys
+     * should set mutiple key with @FieldMeta(id = true) annotation in POJO
+     *
+     * @param obj
+     * @return
+     */
+    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj) {
+        Class clazz = obj.getClass();
+        SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
+        Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+        Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
+        //
+        String tableName = SQLBuilder.getTableName(clazz);
+        Field[] fields = clazz.getDeclaredFields();
+        // build sql
+        StringBuilder sqlBuilder = new StringBuilder();
+        StringBuilder sqlSetBuilder = new StringBuilder();
+        StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        boolean hasAnnotation = false;
+        for (Field field : fields) {
+            try {
+                Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
+                FieldMeta fieldMeta = field.getAnnotation(FieldMeta.class);
+                Assert.notNull(fieldMeta, "Member Variable has not FieldMeta Annotation");
+                hasAnnotation = true;
+                String fieldName = field.getName();
+                String tableFieldName = HumpUtils.underscoreName(fieldName);
+                String getFieldName = "get" + SQLBuilder.captureName(fieldName);
+                Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
+                Object getMethodValue = getMethod.invoke(obj);
+                Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
+                if (fieldMeta.id()) {
+                    // different
+                    sqlWhereBuilder.append(tableFieldName).append("=").append(getMethodValue);
                     sqlWhereMap.put(field, getMethodValue);
                 } else {
                     sqlSetBuilder.append(tableFieldName).append("=?,");
