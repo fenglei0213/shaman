@@ -166,9 +166,8 @@ public class SQLBuilder {
         String sqlSetString = sqlSetBuilder.toString();
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
         //
-        String sqlWhereString = sqlWhereBuilder.toString();
         //
-        sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereString);
+        sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());
         sqlUpdateVo.setSqlSetMap(sqlSetMap);
         sqlUpdateVo.setSqlWhereMap(sqlWhereMap);
