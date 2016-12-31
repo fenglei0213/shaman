@@ -53,7 +53,7 @@ public class ShamanSQLUtils {
                 columnValueItemList.add("'" + item + "'");
             }
             String columnValueItemListString =
-                    "(" + StringUtils.join(columnValueItemList,
+                    "(null," + StringUtils.join(columnValueItemList,
                             ",") + ")";
             columnValueAllList.add(columnValueItemListString);
         }
