@@ -4,5 +4,7 @@
 /shaman-example/target
 /shaman-core/*.iml
 /shaman-example/*.iml
+/shaman-example/shaman-example-biz/shaman-example-biz.iml
+/shaman-example/shaman-example-web/shaman-example-web.iml
 /shaman-parent/shaman-parent.iml
 /logs

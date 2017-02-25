@@ -41,12 +41,24 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
-     * setSelectColumnList setSelectColumnList
+     * addColumn addColumn
      *
+     * @param column
      * @return
      */
-    public QueryVo addColumn(String... args) {
-        this.selectColumnList = Arrays.asList(args);
+    public QueryVo addColumn(String column) {
+        this.selectColumnList.add(column);
+        return this;
+    }
+
+    /**
+     * addColumnObjArray addColumnObjArray
+     *
+     * @param columns
+     * @return
+     */
+    public QueryVo addColumnObjArray(String... columns) {
+        this.selectColumnList = Arrays.asList(columns);
         return this;
     }
 
@@ -88,7 +100,7 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
-     * setWhereColumnMap setWhereColumnMap
+     * addConditionMap addConditionMap
      *
      * @param whereColumnMap
      * @param <T>
@@ -99,7 +111,7 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
-     * setWhereColumn setWhereColumn
+     * addCondition addCondition
      *
      * @param key
      * @param value
@@ -112,13 +124,13 @@ public class QueryVo<T> extends BaseVo<T> {
 
     /**
      * addInCondition addInCondition
-     *
+     * <p>
      * 此方法有问题.会和 Object... 方法冲突,认为List是一个Object
      *
-     * @deprecated
      * @param key
      * @param inList
      * @return
+     * @deprecated
      */
     public QueryVo addInCondition(String key, List<Object> inList) {
         this.whereColumnInMap.put(key, inList);
@@ -160,6 +172,11 @@ public class QueryVo<T> extends BaseVo<T> {
         return this;
     }
 
+    /**
+     * getDistinctColumnMap getDistinctColumnMap
+     *
+     * @return
+     */
     public Map<String, Integer> getDistinctColumnMap() {
         return distinctColumnMap;
     }

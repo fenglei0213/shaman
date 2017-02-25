@@ -48,16 +48,6 @@ public class ShamanTemplate extends JdbcTemplate {
     }
 
     /**
-     * updateTableBatch updateTableBatch
-     *
-     * @param objList
-     * @param clazz
-     */
-    public <T> void updateTableBatch(List<T> objList, Class clazz) {
-
-    }
-
-    /**
      * insertTable insertTable
      *
      * @param sqlInsertVo
