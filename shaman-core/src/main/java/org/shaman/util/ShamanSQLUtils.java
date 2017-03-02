@@ -55,6 +55,9 @@ public class ShamanSQLUtils {
             String columnValueItemListString =
                     "(null," + StringUtils.join(columnValueItemList,
                             ",") + ")";
+//            String columnValueItemListString =
+//                    "(" + StringUtils.join(columnValueItemList,
+//                            ",") + ")";
             columnValueAllList.add(columnValueItemListString);
         }
         String columnValueAllListString = StringUtils.join(columnValueAllList,

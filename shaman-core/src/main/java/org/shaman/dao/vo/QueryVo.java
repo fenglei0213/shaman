@@ -144,7 +144,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param objects
      * @return
      */
-    public QueryVo addInCondition(String key, Object... objects) {
+    public QueryVo addInConditionObjectList(String key, Object... objects) {
         this.whereColumnInMap.put(key, Arrays.asList(objects));
         return this;
     }
