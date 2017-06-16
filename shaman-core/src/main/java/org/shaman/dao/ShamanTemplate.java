@@ -79,7 +79,8 @@ public class ShamanTemplate extends JdbcTemplate {
     public void updateBatch(SQLBatchVo sqlBatchVo) {
         String sql = sqlBatchVo.getSql();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
-        UpdateBatchSetter updateBatchSetter = new UpdateBatchSetter(sqlSetList);
+        List<Map<Field, Object>> sqlWhereList = sqlBatchVo.getSqlWhereList();
+        UpdateBatchSetter updateBatchSetter = new UpdateBatchSetter(sqlSetList,sqlWhereList);
         super.batchUpdate(sql, updateBatchSetter);
     }
 

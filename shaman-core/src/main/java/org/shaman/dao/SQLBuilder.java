@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by fenglei on 2016/3/3.
@@ -101,17 +102,20 @@ public class SQLBuilder {
      * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
      *
      * @param objectList
-     * @param sqlWhereCusMap
+     * @param sqlWhereCusSet
      * @return
      */
     public static <T> SQLBatchVo buildUpdateBatchTableSQL(List<T> objectList,
-                                                          Map<String, Object> sqlWhereCusMap) {
+                                                          Set<String> sqlWhereCusSet) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
+        List<Map<Field, Object>> sqlWhereList = sqlBatchVo.getSqlWhereList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusMap);
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusSet);
             sqlSetList.add(sqlUpdateVo.getSqlSetMap());
+            sqlWhereList.add(sqlUpdateVo.getSqlWhereMap());
+            // repeat
             sqlBatchVo.setSql(sqlUpdateVo.getSql());
         }
         return sqlBatchVo;
@@ -194,10 +198,10 @@ public class SQLBuilder {
      * should set mutiple key with @FieldMeta(id = true) annotation in POJO
      *
      * @param obj
-     * @param sqlWhereCusMap
+     * @param sqlWhereCusSet
      * @return
      */
-    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj, Map<String, Object> sqlWhereCusMap) {
+    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj, Set<String> sqlWhereCusSet) {
         Class clazz = obj.getClass();
         SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
         Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
@@ -210,10 +214,10 @@ public class SQLBuilder {
         StringBuilder sqlSetBuilder = new StringBuilder();
         StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
         // check sqlWhereMap,not default id key,by user customer key
-        if (!CollectionUtils.isEmpty(sqlWhereCusMap)) {
+        if (!CollectionUtils.isEmpty(sqlWhereCusSet)) {
             sqlWhereBuilder.append(
-                    StringUtils.join(sqlWhereCusMap.keySet(),
-                            " =? AND ").concat(" =? "));
+                    StringUtils.join(sqlWhereCusSet,
+                            "=? AND ").concat("=? "));
         }
         boolean hasAnnotation = false;
         for (Field field : fields) {
@@ -228,14 +232,17 @@ public class SQLBuilder {
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
-                if (!CollectionUtils.isEmpty(sqlWhereMap) && sqlWhereCusMap.keySet().contains(fieldName)) {
+                if (!CollectionUtils.isEmpty(sqlWhereCusSet) && sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName))) {
+                    // where not primary key
                     sqlWhereMap.put(field, getMethodValue);
                 }
-                if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusMap)) {
-                    // different
+                if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusSet)) {
+                    // where primary key
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
                     sqlWhereMap.put(field, getMethodValue);
-                } else {
+                } else if ((!CollectionUtils.isEmpty(sqlWhereCusSet) &&
+                        !sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName)))
+                        || CollectionUtils.isEmpty(sqlWhereCusSet)) {
                     sqlSetBuilder.append(tableFieldName).append("=?,");
                     sqlSetMap.put(field, getMethodValue);
                 }
@@ -251,8 +258,6 @@ public class SQLBuilder {
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());
         sqlUpdateVo.setSqlSetMap(sqlSetMap);
-        // different
-        sqlSetMap.putAll(sqlWhereMap);
         return sqlUpdateVo;
     }
 

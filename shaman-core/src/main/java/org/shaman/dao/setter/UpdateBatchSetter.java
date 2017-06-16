@@ -13,23 +13,24 @@ import java.util.Map;
  */
 public class UpdateBatchSetter extends BaseSetter implements BatchPreparedStatementSetter {
 
-    private List<Map<Field, Object>> sqlSetList;
+    private List<Map<Field, Object>> sqlParamList;
 
-    public UpdateBatchSetter(List<Map<Field, Object>> sqlSetList) {
-        this.setSqlSetList(sqlSetList);
+    public UpdateBatchSetter(List<Map<Field, Object>> sqlSetList, List<Map<Field, Object>> sqlWhereList) {
+        sqlSetList.addAll(sqlWhereList);
+        this.setSqlParamList(sqlSetList);
     }
 
     @Override
     public void setValues(PreparedStatement ps, int i) throws SQLException {
-        super.setFieldValueBatchLoop(ps, sqlSetList, i);
+        super.setFieldValueBatchLoop(ps, sqlParamList, i);
     }
 
     @Override
     public int getBatchSize() {
-        return sqlSetList.size();
+        return sqlParamList.size();
     }
 
-    public void setSqlSetList(List<Map<Field, Object>> sqlSetList) {
-        this.sqlSetList = sqlSetList;
+    public void setSqlParamList(List<Map<Field, Object>> sqlParamList) {
+        this.sqlParamList = sqlParamList;
     }
 }

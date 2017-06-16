@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by fenglei on 2016/3/3.
@@ -165,10 +166,10 @@ public class ShamanDao {
      * Custmer Where Key/Value
      *
      * @param objectList
-     * @param sqlWhereCusMap
+     * @param sqlWhereCusSet
      * @param <T>
      */
-    public <T> void updateBatch(List<T> objectList, Map<String,Object> sqlWhereCusMap) {
+    public <T> void updateBatch(List<T> objectList, Set<String> sqlWhereCusSet) {
         if (CollectionUtils.isEmpty(objectList)) {
             return;
         }
@@ -178,7 +179,7 @@ public class ShamanDao {
                 throw new ShamanArgsException("updateBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, sqlWhereCusMap);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, sqlWhereCusSet);
         shamanTemplate.updateBatch(sqlBatchVo);
     }
 
