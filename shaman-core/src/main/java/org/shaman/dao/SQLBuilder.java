@@ -101,14 +101,16 @@ public class SQLBuilder {
      * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
      *
      * @param objectList
+     * @param sqlWhereCusMap
      * @return
      */
-    public static <T> SQLBatchVo buildUpdateBatchTableSQL(List<T> objectList) {
+    public static <T> SQLBatchVo buildUpdateBatchTableSQL(List<T> objectList,
+                                                          Map<String, Object> sqlWhereCusMap) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object);
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusMap);
             sqlSetList.add(sqlUpdateVo.getSqlSetMap());
             sqlBatchVo.setSql(sqlUpdateVo.getSql());
         }
@@ -119,7 +121,8 @@ public class SQLBuilder {
      * buildUpdateTableSql buildUpdateTableSql
      * <p>
      * support composite keys
-     * should set mutiple key with @FieldMeta(id = true) annotation in POJO
+     * default key is @FieldMeta(id = true) annotation in POJO
+     * User can define thire's key,by set key/value to sqlWhereMap
      *
      * @param obj
      * @return
@@ -136,6 +139,12 @@ public class SQLBuilder {
         StringBuilder sqlBuilder = new StringBuilder();
         StringBuilder sqlSetBuilder = new StringBuilder();
         StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        // check sqlWhereMap,not default id key,by user customer key
+        if (!CollectionUtils.isEmpty(sqlWhereMap)) {
+            sqlWhereBuilder.append(
+                    StringUtils.join(sqlWhereMap.keySet(),
+                            " =? AND ").concat(" =? "));
+        }
         boolean hasAnnotation = false;
         for (Field field : fields) {
             try {
@@ -149,7 +158,10 @@ public class SQLBuilder {
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
-                if (fieldMeta.id()) {
+                if (!CollectionUtils.isEmpty(sqlWhereMap) && sqlWhereMap.keySet().contains(fieldName)) {
+                    sqlWhereMap.put(field, getMethodValue);
+                }
+                if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereMap)) {
                     // support composite keys
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
                     sqlWhereMap.put(field, getMethodValue);
@@ -158,6 +170,7 @@ public class SQLBuilder {
                     sqlSetMap.put(field, getMethodValue);
                 }
             } catch (Exception e) {
+
                 continue;
             }
         }
@@ -165,7 +178,6 @@ public class SQLBuilder {
         //
         String sqlSetString = sqlSetBuilder.toString();
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
-        //
         //
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());
@@ -182,9 +194,10 @@ public class SQLBuilder {
      * should set mutiple key with @FieldMeta(id = true) annotation in POJO
      *
      * @param obj
+     * @param sqlWhereCusMap
      * @return
      */
-    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj) {
+    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj, Map<String, Object> sqlWhereCusMap) {
         Class clazz = obj.getClass();
         SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
         Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
@@ -196,6 +209,12 @@ public class SQLBuilder {
         StringBuilder sqlBuilder = new StringBuilder();
         StringBuilder sqlSetBuilder = new StringBuilder();
         StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        // check sqlWhereMap,not default id key,by user customer key
+        if (!CollectionUtils.isEmpty(sqlWhereCusMap)) {
+            sqlWhereBuilder.append(
+                    StringUtils.join(sqlWhereCusMap.keySet(),
+                            " =? AND ").concat(" =? "));
+        }
         boolean hasAnnotation = false;
         for (Field field : fields) {
             try {
@@ -209,7 +228,10 @@ public class SQLBuilder {
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
-                if (fieldMeta.id()) {
+                if (!CollectionUtils.isEmpty(sqlWhereMap) && sqlWhereCusMap.keySet().contains(fieldName)) {
+                    sqlWhereMap.put(field, getMethodValue);
+                }
+                if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusMap)) {
                     // different
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
                     sqlWhereMap.put(field, getMethodValue);
@@ -225,7 +247,6 @@ public class SQLBuilder {
         //
         String sqlSetString = sqlSetBuilder.toString();
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
-        //
         //
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());

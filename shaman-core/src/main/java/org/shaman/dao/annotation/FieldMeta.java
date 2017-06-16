@@ -17,6 +17,12 @@ public @interface FieldMeta {
      * @return
      */
     boolean id() default false;
+
+    /**
+     * 是否是多列主键
+     * @return
+     */
+    boolean unionKey() default false;
     /**
      * 字段名称
      * @return

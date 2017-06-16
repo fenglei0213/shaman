@@ -6,6 +6,7 @@ import org.shaman.dao.vo.*;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fenglei on 2016/3/3.
@@ -140,6 +141,7 @@ public class ShamanDao {
 
     /**
      * updateBatch updateBatch
+     * update key default primary key
      *
      * @param objectList
      * @param <T>
@@ -154,7 +156,29 @@ public class ShamanDao {
                 throw new ShamanArgsException("updateBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, null);
+        shamanTemplate.updateBatch(sqlBatchVo);
+    }
+
+    /**
+     * updateBatch updateBatch
+     * Custmer Where Key/Value
+     *
+     * @param objectList
+     * @param sqlWhereCusMap
+     * @param <T>
+     */
+    public <T> void updateBatch(List<T> objectList, Map<String,Object> sqlWhereCusMap) {
+        if (CollectionUtils.isEmpty(objectList)) {
+            return;
+        }
+        // List is not empty,But each item is empty
+        for (T item : objectList) {
+            if (item == null) {
+                throw new ShamanArgsException("updateBatch args objectList contains NULL item");
+            }
+        }
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, sqlWhereCusMap);
         shamanTemplate.updateBatch(sqlBatchVo);
     }
 
