@@ -13,11 +13,9 @@ import java.util.Map;
 public class UpdateSetter extends BaseSetter implements PreparedStatementSetter {
 
     private Map<Field, Object> sqlSetMap;
-    private Map<Field, Object> sqlWhereMap;
 
-    public UpdateSetter(Map<Field, Object> sqlSetMap, Map<Field, Object> sqlWhereMap) {
+    public UpdateSetter(Map<Field, Object> sqlSetMap) {
         this.setSqlSetMap(sqlSetMap);
-        this.setSqlWhereMap(sqlWhereMap);
     }
 
     /**
@@ -29,9 +27,7 @@ public class UpdateSetter extends BaseSetter implements PreparedStatementSetter 
     @Override
     public void setValues(PreparedStatement pst) throws SQLException {
         // set value
-        int i = super.setFieldValueLoop(pst, sqlSetMap, 1);
-        // set WHERE id=x
-        super.setFieldValueLoop(pst, sqlWhereMap, i);
+        super.setFieldValueLoop(pst, sqlSetMap, 1);
     }
 
     public Map<Field, Object> getSqlSetMap() {
@@ -42,11 +38,4 @@ public class UpdateSetter extends BaseSetter implements PreparedStatementSetter 
         this.sqlSetMap = sqlSetMap;
     }
 
-    public Map<Field, Object> getSqlWhereMap() {
-        return sqlWhereMap;
-    }
-
-    public void setSqlWhereMap(Map<Field, Object> sqlWhereMap) {
-        this.sqlWhereMap = sqlWhereMap;
-    }
 }

@@ -42,8 +42,7 @@ public class ShamanTemplate extends JdbcTemplate {
     public void updateTable(SQLUpdateVo sqlUpdateVo) {
         String sql = sqlUpdateVo.getSql();
         Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
-        Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
-        UpdateSetter updateSetter = new UpdateSetter(sqlSetMap, sqlWhereMap);
+        UpdateSetter updateSetter = new UpdateSetter(sqlSetMap);
         super.update(sql, updateSetter);
     }
 
