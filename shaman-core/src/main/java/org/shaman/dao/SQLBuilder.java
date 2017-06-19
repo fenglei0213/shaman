@@ -1,6 +1,7 @@
 package org.shaman.dao;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
@@ -8,7 +9,6 @@ import org.shaman.util.HumpUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -109,87 +109,16 @@ public class SQLBuilder {
                                                           Set<String> sqlWhereCusSet) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
-        List<Map<Field, Object>> sqlWhereList = sqlBatchVo.getSqlWhereList();
         // Performance Optimization Here
         for (T object : objectList) {
             SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusSet);
-            sqlSetList.add(sqlUpdateVo.getSqlSetMap());
-            sqlWhereList.add(sqlUpdateVo.getSqlWhereMap());
+            Map<Field,Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+            sqlSetList.add(sqlSetMap);
             // repeat
             sqlBatchVo.setSql(sqlUpdateVo.getSql());
         }
         return sqlBatchVo;
     }
-
-    /**
-     * buildUpdateTableSql buildUpdateTableSql
-     * <p>
-     * support composite keys
-     * default key is @FieldMeta(id = true) annotation in POJO
-     * User can define thire's key,by set key/value to sqlWhereMap
-     *
-     * @param obj
-     * @return
-     */
-    public static <T> SQLUpdateVo buildUpdateTableSQL(T obj) {
-        Class clazz = obj.getClass();
-        SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
-        Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
-        Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
-        //
-        String tableName = SQLBuilder.getTableName(clazz);
-        Field[] fields = clazz.getDeclaredFields();
-        // build sql
-        StringBuilder sqlBuilder = new StringBuilder();
-        StringBuilder sqlSetBuilder = new StringBuilder();
-        StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
-        // check sqlWhereMap,not default id key,by user customer key
-        if (!CollectionUtils.isEmpty(sqlWhereMap)) {
-            sqlWhereBuilder.append(
-                    StringUtils.join(sqlWhereMap.keySet(),
-                            " =? AND ").concat(" =? "));
-        }
-        boolean hasAnnotation = false;
-        for (Field field : fields) {
-            try {
-                Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
-                FieldMeta fieldMeta = field.getAnnotation(FieldMeta.class);
-                Assert.notNull(fieldMeta, "Member Variable has not FieldMeta Annotation");
-                hasAnnotation = true;
-                String fieldName = field.getName();
-                String tableFieldName = HumpUtils.underscoreName(fieldName);
-                String getFieldName = "get" + SQLBuilder.captureName(fieldName);
-                Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
-                Object getMethodValue = getMethod.invoke(obj);
-                Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
-                if (!CollectionUtils.isEmpty(sqlWhereMap) && sqlWhereMap.keySet().contains(fieldName)) {
-                    sqlWhereMap.put(field, getMethodValue);
-                }
-                if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereMap)) {
-                    // support composite keys
-                    sqlWhereBuilder.append(tableFieldName).append("=? ");
-                    sqlWhereMap.put(field, getMethodValue);
-                } else {
-                    sqlSetBuilder.append(tableFieldName).append("=?,");
-                    sqlSetMap.put(field, getMethodValue);
-                }
-            } catch (Exception e) {
-
-                continue;
-            }
-        }
-        Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
-        //
-        String sqlSetString = sqlSetBuilder.toString();
-        sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
-        //
-        sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
-        sqlUpdateVo.setSql(sqlBuilder.toString());
-        sqlUpdateVo.setSqlSetMap(sqlSetMap);
-        sqlUpdateVo.setSqlWhereMap(sqlWhereMap);
-        return sqlUpdateVo;
-    }
-
 
     /**
      * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
@@ -205,7 +134,6 @@ public class SQLBuilder {
         Class clazz = obj.getClass();
         SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
         Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
-        Map<Field, Object> sqlWhereMap = sqlUpdateVo.getSqlWhereMap();
         //
         String tableName = SQLBuilder.getTableName(clazz);
         Field[] fields = clazz.getDeclaredFields();
@@ -234,12 +162,12 @@ public class SQLBuilder {
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 if (!CollectionUtils.isEmpty(sqlWhereCusSet) && sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName))) {
                     // where not primary key
-                    sqlWhereMap.put(field, getMethodValue);
+                    sqlSetMap.put(field, getMethodValue);
                 }
                 if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusSet)) {
                     // where primary key
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
-                    sqlWhereMap.put(field, getMethodValue);
+                    sqlSetMap.put(field, getMethodValue);
                 } else if ((!CollectionUtils.isEmpty(sqlWhereCusSet) &&
                         !sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName)))
                         || CollectionUtils.isEmpty(sqlWhereCusSet)) {

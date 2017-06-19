@@ -105,7 +105,7 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void updateObjectForTable(T obj) {
-        SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateTableSQL(obj);
+        SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(obj, null);
         shamanTemplate.updateTable(sqlUpdateVo);
     }
 

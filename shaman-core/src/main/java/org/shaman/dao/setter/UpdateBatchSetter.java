@@ -15,8 +15,7 @@ public class UpdateBatchSetter extends BaseSetter implements BatchPreparedStatem
 
     private List<Map<Field, Object>> sqlParamList;
 
-    public UpdateBatchSetter(List<Map<Field, Object>> sqlSetList, List<Map<Field, Object>> sqlWhereList) {
-        sqlSetList.addAll(sqlWhereList);
+    public UpdateBatchSetter(List<Map<Field, Object>> sqlSetList) {
         this.setSqlParamList(sqlSetList);
     }
 

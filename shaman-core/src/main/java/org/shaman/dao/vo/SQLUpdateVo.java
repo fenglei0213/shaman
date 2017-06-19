@@ -11,7 +11,6 @@ import java.util.Map;
 public class SQLUpdateVo extends SQLBaseVo {
 
     private Map<Field, Object> sqlSetMap = Maps.newLinkedHashMap();
-    private Map<Field, Object> sqlWhereMap = Maps.newLinkedHashMap();
 
     public Map<Field, Object> getSqlSetMap() {
         return sqlSetMap;
@@ -21,11 +20,4 @@ public class SQLUpdateVo extends SQLBaseVo {
         this.sqlSetMap = sqlSetMap;
     }
 
-    public Map<Field, Object> getSqlWhereMap() {
-        return sqlWhereMap;
-    }
-
-    public void setSqlWhereMap(Map<Field, Object> sqlWhereMap) {
-        this.sqlWhereMap = sqlWhereMap;
-    }
 }
