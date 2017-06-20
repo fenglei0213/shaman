@@ -1,6 +1,7 @@
 package org.shaman.dao;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.shaman.dao.annotation.FieldMeta;
@@ -112,7 +113,7 @@ public class SQLBuilder {
         // Performance Optimization Here
         for (T object : objectList) {
             SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusSet);
-            Map<Field,Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+            Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
             sqlSetList.add(sqlSetMap);
             // repeat
             sqlBatchVo.setSql(sqlUpdateVo.getSql());
@@ -141,13 +142,13 @@ public class SQLBuilder {
         StringBuilder sqlBuilder = new StringBuilder();
         StringBuilder sqlSetBuilder = new StringBuilder();
         StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        List sqlWhereParamList = Lists.newArrayList();
         // check sqlWhereMap,not default id key,by user customer key
         if (!CollectionUtils.isEmpty(sqlWhereCusSet)) {
-            sqlWhereBuilder.append(
-                    StringUtils.join(sqlWhereCusSet,
-                            "=? AND ").concat("=? "));
+
         }
         boolean hasAnnotation = false;
+        Map<Field, Object> whereFieldValueMap = Maps.newLinkedHashMap();
         for (Field field : fields) {
             try {
                 Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
@@ -162,7 +163,8 @@ public class SQLBuilder {
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 if (!CollectionUtils.isEmpty(sqlWhereCusSet) && sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName))) {
                     // where not primary key
-                    sqlSetMap.put(field, getMethodValue);
+                    whereFieldValueMap.put(field, getMethodValue);
+
                 }
                 if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusSet)) {
                     // where primary key
@@ -178,10 +180,20 @@ public class SQLBuilder {
                 continue;
             }
         }
+        // gen Where SQL
+        for (Map.Entry<Field, Object> item : whereFieldValueMap.entrySet()) {
+            Field field = item.getKey();
+            String fieldName = field.getName();
+            Object getMethodValue = item.getValue();
+            sqlSetMap.put(field, getMethodValue);
+            sqlWhereParamList.add(HumpUtils.underscoreName(fieldName).concat("=?"));
+        }
         Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
         //
         String sqlSetString = sqlSetBuilder.toString();
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
+        //
+        sqlWhereBuilder.append(StringUtils.join(sqlWhereParamList, " AND "));
         //
         sqlBuilder.append("UPDATE ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
         sqlUpdateVo.setSql(sqlBuilder.toString());
