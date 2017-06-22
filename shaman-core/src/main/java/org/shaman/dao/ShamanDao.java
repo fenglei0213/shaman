@@ -116,7 +116,19 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void insertObject(T obj) {
-        SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj);
+        SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj, "");
+        shamanTemplate.insert(sqlInsertVo);
+    }
+
+    /**
+     * addObject2Table addObject2Table
+     *
+     * @param obj
+     * @param tableName
+     * @param <T>
+     */
+    public <T> void insertObject(T obj, String tableName) {
+        SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj, tableName);
         shamanTemplate.insert(sqlInsertVo);
     }
 
@@ -136,7 +148,28 @@ public class ShamanDao {
                 throw new ShamanArgsException("insertBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList, "");
+        shamanTemplate.insertBatch(sqlBatchVo);
+    }
+
+    /**
+     * insertObjectBatch insertObjectBatch
+     *
+     * @param objectList
+     * @param tableName
+     * @param <T>
+     */
+    public <T> void insertBatch(List<T> objectList, String tableName) {
+        if (CollectionUtils.isEmpty(objectList)) {
+            return;
+        }
+        // List is not empty,But each item is empty
+        for (T item : objectList) {
+            if (item == null) {
+                throw new ShamanArgsException("insertBatch args objectList contains NULL item");
+            }
+        }
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList, tableName);
         shamanTemplate.insertBatch(sqlBatchVo);
     }
 

@@ -26,14 +26,18 @@ public class SQLBuilder {
      * buildInsertTableSQL buildInsertTableSQL
      *
      * @param obj
+     * @param tableNameCus
      * @return
      */
-    public static <T> SQLInsertVo buildInsertTableSQL(T obj) {
+    public static <T> SQLInsertVo buildInsertTableSQL(T obj,String tableNameCus) {
         Class clazz = obj.getClass();
         SQLInsertVo sqlInsertVo = new SQLInsertVo();
         Map<Field, Object> sqlSetMap = sqlInsertVo.getSqlSetMap();
         //
         String tableName = SQLBuilder.getTableName(clazz);
+        if(!StringUtils.isEmpty(tableNameCus)){
+            tableName = tableNameCus;
+        }
         Field[] fields = clazz.getDeclaredFields();
         // build sql
         StringBuilder sqlBuilder = new StringBuilder();
@@ -85,14 +89,15 @@ public class SQLBuilder {
      * buildInsertTableSQL buildInsertTableSQL
      *
      * @param objectList
+     * @param tableName
      * @return
      */
-    public static <T> SQLBatchVo buildInsertBatchTableSQL(List<T> objectList) {
+    public static <T> SQLBatchVo buildInsertBatchTableSQL(List<T> objectList,String tableName) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object);
+            SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object,tableName);
             sqlSetList.add(sqlInsertVo.getSqlSetMap());
             sqlBatchVo.setSql(sqlInsertVo.getSql());
         }
