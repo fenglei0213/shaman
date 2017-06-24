@@ -29,13 +29,13 @@ public class SQLBuilder {
      * @param tableNameCus
      * @return
      */
-    public static <T> SQLInsertVo buildInsertTableSQL(T obj,String tableNameCus) {
+    public static <T> SQLInsertVo buildInsertTableSQL(T obj, String tableNameCus) {
         Class clazz = obj.getClass();
         SQLInsertVo sqlInsertVo = new SQLInsertVo();
         Map<Field, Object> sqlSetMap = sqlInsertVo.getSqlSetMap();
         //
         String tableName = SQLBuilder.getTableName(clazz);
-        if(!StringUtils.isEmpty(tableNameCus)){
+        if (!StringUtils.isEmpty(tableNameCus)) {
             tableName = tableNameCus;
         }
         Field[] fields = clazz.getDeclaredFields();
@@ -92,12 +92,12 @@ public class SQLBuilder {
      * @param tableName
      * @return
      */
-    public static <T> SQLBatchVo buildInsertBatchTableSQL(List<T> objectList,String tableName) {
+    public static <T> SQLBatchVo buildInsertBatchTableSQL(List<T> objectList, String tableName) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object,tableName);
+            SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(object, tableName);
             sqlSetList.add(sqlInsertVo.getSqlSetMap());
             sqlBatchVo.setSql(sqlInsertVo.getSql());
         }
@@ -112,12 +112,13 @@ public class SQLBuilder {
      * @return
      */
     public static <T> SQLBatchVo buildUpdateBatchTableSQL(List<T> objectList,
-                                                          Set<String> sqlWhereCusSet) {
+                                                          Set<String> sqlWhereCusSet,
+                                                          String tableName) {
         SQLBatchVo sqlBatchVo = new SQLBatchVo();
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusSet);
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(object, sqlWhereCusSet, tableName);
             Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
             sqlSetList.add(sqlSetMap);
             // repeat
@@ -134,14 +135,18 @@ public class SQLBuilder {
      *
      * @param obj
      * @param sqlWhereCusSet
+     * @param tableNameCus
      * @return
      */
-    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj, Set<String> sqlWhereCusSet) {
+    public static <T> SQLUpdateVo buildUpdateBatchTableSQL(T obj, Set<String> sqlWhereCusSet, String tableNameCus) {
         Class clazz = obj.getClass();
         SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
         Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
         //
         String tableName = SQLBuilder.getTableName(clazz);
+        if (!StringUtils.isEmpty(tableNameCus)) {
+            tableName = tableNameCus;
+        }
         Field[] fields = clazz.getDeclaredFields();
         // build sql
         StringBuilder sqlBuilder = new StringBuilder();

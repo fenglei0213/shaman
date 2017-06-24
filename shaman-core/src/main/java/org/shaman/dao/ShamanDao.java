@@ -105,7 +105,30 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void updateObjectForTable(T obj) {
-        SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(obj, null);
+        this.updateObjectForTable(obj, null, null);
+    }
+
+    /**
+     * updateObject2Table updateObject2Table
+     *
+     * @param obj
+     * @param sqlWhereCusSet
+     * @param <T>
+     */
+    public <T> void updateObjectForTable(T obj, Set<String> sqlWhereCusSet) {
+        this.updateObjectForTable(obj, sqlWhereCusSet, null);
+    }
+
+    /**
+     * updateObject2Table updateObject2Table
+     *
+     * @param obj
+     * @param sqlWhereCusSet
+     * @param tableName
+     * @param <T>
+     */
+    public <T> void updateObjectForTable(T obj, Set<String> sqlWhereCusSet, String tableName) {
+        SQLUpdateVo sqlUpdateVo = SQLBuilder.buildUpdateBatchTableSQL(obj, sqlWhereCusSet, tableName);
         shamanTemplate.updateTable(sqlUpdateVo);
     }
 
@@ -116,8 +139,7 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void insertObject(T obj) {
-        SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj, "");
-        shamanTemplate.insert(sqlInsertVo);
+        this.insertObject(obj, null);
     }
 
     /**
@@ -139,17 +161,7 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void insertBatch(List<T> objectList) {
-        if (CollectionUtils.isEmpty(objectList)) {
-            return;
-        }
-        // List is not empty,But each item is empty
-        for (T item : objectList) {
-            if (item == null) {
-                throw new ShamanArgsException("insertBatch args objectList contains NULL item");
-            }
-        }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildInsertBatchTableSQL(objectList, "");
-        shamanTemplate.insertBatch(sqlBatchVo);
+        this.insertBatch(objectList, null);
     }
 
     /**
@@ -181,17 +193,7 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void updateBatch(List<T> objectList) {
-        if (CollectionUtils.isEmpty(objectList)) {
-            return;
-        }
-        // List is not empty,But each item is empty
-        for (T item : objectList) {
-            if (item == null) {
-                throw new ShamanArgsException("updateBatch args objectList contains NULL item");
-            }
-        }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, null);
-        shamanTemplate.updateBatch(sqlBatchVo);
+        this.insertBatch(objectList, null);
     }
 
     /**
@@ -200,9 +202,10 @@ public class ShamanDao {
      *
      * @param objectList
      * @param sqlWhereCusSet
+     * @param tableName
      * @param <T>
      */
-    public <T> void updateBatch(List<T> objectList, Set<String> sqlWhereCusSet) {
+    public <T> void updateBatch(List<T> objectList, Set<String> sqlWhereCusSet, String tableName) {
         if (CollectionUtils.isEmpty(objectList)) {
             return;
         }
@@ -212,7 +215,7 @@ public class ShamanDao {
                 throw new ShamanArgsException("updateBatch args objectList contains NULL item");
             }
         }
-        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, sqlWhereCusSet);
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildUpdateBatchTableSQL(objectList, sqlWhereCusSet, tableName);
         shamanTemplate.updateBatch(sqlBatchVo);
     }
 
