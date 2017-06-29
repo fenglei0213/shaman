@@ -193,7 +193,19 @@ public class ShamanDao {
      * @param <T>
      */
     public <T> void updateBatch(List<T> objectList) {
-        this.insertBatch(objectList, null);
+        this.updateBatch(objectList, null);
+    }
+
+    /**
+     * updateBatch updateBatch
+     * update key default primary key
+     *
+     * @param objectList
+     * @param sqlWhereCusSet
+     * @param <T>
+     */
+    public <T> void updateBatch(List<T> objectList, Set<String> sqlWhereCusSet) {
+        this.updateBatch(objectList, sqlWhereCusSet, null);
     }
 
     /**
