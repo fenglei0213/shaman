@@ -22,10 +22,6 @@ public class SQLConfigurer {
 
     private static List<String> sqlFileList = Arrays.asList("/sql/newlog.sql");
 
-    //    private static String sql="getStatUndoCount:SELECT COUNT(*) FROM log_urlkey_item_relation as relation WHERE relation.project_id=? AND (relation.server_state=1 OR " +
-//            " relation.ios_state=1 OR relation.android_state=1);" +
-//            " getStatDoneCount:SELECT COUNT(*) FROM log_urlkey_item_relation as relation WHERE relation.project_id=? AND (relation.server_state=2 OR " +
-//            " relation.ios_state=2 OR relation.android_state=2);";
     private static String sql = "";
 
     private static Map<String, String> yamlConfigMap = Maps.newHashMap();
