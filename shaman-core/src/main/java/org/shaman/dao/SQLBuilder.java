@@ -153,10 +153,6 @@ public class SQLBuilder {
         StringBuilder sqlSetBuilder = new StringBuilder();
         StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
         List sqlWhereParamList = Lists.newArrayList();
-        // check sqlWhereMap,not default id key,by user customer key
-        if (!CollectionUtils.isEmpty(sqlWhereCusSet)) {
-
-        }
         boolean hasAnnotation = false;
         Map<Field, Object> whereFieldValueMap = Maps.newLinkedHashMap();
         for (Field field : fields) {
@@ -513,5 +509,89 @@ public class SQLBuilder {
     public static String buildTruncateTableSQL(String tableName) {
         String truncateTableSQL = "TRUNCATE TABLE ".concat(tableName);
         return truncateTableSQL;
+    }
+
+    /**
+     * buildReplaceBatchTableSQL buildReplaceBatchTableSQL
+     *
+     * @param objectList
+     * @param tableName
+     * @param <T>
+     * @return
+     */
+    public static <T> SQLBatchVo buildReplaceBatchTableSQL(List<T> objectList, String tableName) {
+        SQLBatchVo sqlBatchVo = new SQLBatchVo();
+        List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
+        // Performance Optimization Here
+        for (T object : objectList) {
+            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildReplaceBatchTableSQL(object, tableName);
+            Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+            sqlSetList.add(sqlSetMap);
+            // repeat
+            sqlBatchVo.setSql(sqlUpdateVo.getSql());
+        }
+        return sqlBatchVo;
+    }
+
+    /**
+     * buildUpdateBatchTableSQL buildUpdateBatchTableSQL
+     * <p>
+     * support composite keys
+     * should set mutiple key with @FieldMeta(id = true) annotation in POJO
+     *
+     * @param obj
+     * @param tableNameCus
+     * @return
+     */
+    public static <T> SQLUpdateVo buildReplaceBatchTableSQL(T obj, String tableNameCus) {
+        Class clazz = obj.getClass();
+        SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
+        Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+        //
+        String tableName = SQLBuilder.getTableName(clazz);
+        if (!StringUtils.isEmpty(tableNameCus)) {
+            tableName = tableNameCus;
+        }
+        Field[] fields = clazz.getDeclaredFields();
+        // build sql
+        StringBuilder sqlBuilder = new StringBuilder();
+        StringBuilder sqlSetBuilder = new StringBuilder();
+        StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        boolean hasAnnotation = false;
+        Map<Field, Object> whereFieldValueMap = Maps.newLinkedHashMap();
+        for (Field field : fields) {
+            try {
+                Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
+                FieldMeta fieldMeta = field.getAnnotation(FieldMeta.class);
+                Assert.notNull(fieldMeta, "Member Variable has not FieldMeta Annotation");
+                hasAnnotation = true;
+                String fieldName = field.getName();
+                String tableFieldName = HumpUtils.underscoreName(fieldName);
+                String getFieldName = "get" + SQLBuilder.captureName(fieldName);
+                Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
+                Object getMethodValue = getMethod.invoke(obj);
+                Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
+
+                sqlSetBuilder.append(tableFieldName).append("=?,");
+                sqlSetMap.put(field, getMethodValue);
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        // gen Where SQL
+        for (Map.Entry<Field, Object> item : whereFieldValueMap.entrySet()) {
+            Field field = item.getKey();
+            Object getMethodValue = item.getValue();
+            sqlSetMap.put(field, getMethodValue);
+        }
+        Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
+        //
+        String sqlSetString = sqlSetBuilder.toString();
+        sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
+        //
+        sqlBuilder.append("REPLACE INTO ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
+        sqlUpdateVo.setSql(sqlBuilder.toString());
+        sqlUpdateVo.setSqlSetMap(sqlSetMap);
+        return sqlUpdateVo;
     }
 }

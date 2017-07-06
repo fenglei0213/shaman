@@ -232,6 +232,37 @@ public class ShamanDao {
     }
 
     /**
+     * replaceBatch replaceBatch
+     *
+     * @param objectList
+     * @param <T>
+     */
+    public <T> void replaceBatch(List<T> objectList){
+        this.replaceBatch(objectList, null);
+    }
+
+    /**
+     * replaceBatch replaceBatch
+     *
+     * @param objectList
+     * @param tableName
+     * @param <T>
+     */
+    public <T> void replaceBatch(List<T> objectList,String tableName){
+        if (CollectionUtils.isEmpty(objectList)) {
+            return;
+        }
+        // List is not empty,But each item is empty
+        for (T item : objectList) {
+            if (item == null) {
+                throw new ShamanArgsException("replaceBatch args objectList contains NULL item");
+            }
+        }
+        SQLBatchVo sqlBatchVo = SQLBuilder.buildReplaceBatchTableSQL(objectList, tableName);
+        shamanTemplate.updateBatch(sqlBatchVo);
+    }
+
+    /**
      * deleteRowForTable deleteRowForTable
      *
      * @param deleteVo
