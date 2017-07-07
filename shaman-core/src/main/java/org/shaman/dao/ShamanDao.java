@@ -259,7 +259,7 @@ public class ShamanDao {
             }
         }
         SQLBatchVo sqlBatchVo = SQLBuilder.buildReplaceBatchTableSQL(objectList, tableName);
-        shamanTemplate.updateBatch(sqlBatchVo);
+        shamanTemplate.insertBatch(sqlBatchVo);
     }
 
     /**

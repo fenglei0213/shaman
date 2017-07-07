@@ -524,11 +524,9 @@ public class SQLBuilder {
         List<Map<Field, Object>> sqlSetList = sqlBatchVo.getSqlSetList();
         // Performance Optimization Here
         for (T object : objectList) {
-            SQLUpdateVo sqlUpdateVo = SQLBuilder.buildReplaceBatchTableSQL(object, tableName);
-            Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
-            sqlSetList.add(sqlSetMap);
-            // repeat
-            sqlBatchVo.setSql(sqlUpdateVo.getSql());
+            SQLInsertVo sqlInsertVo = SQLBuilder.buildReplaceBatchTableSQL(object, tableName);
+            sqlSetList.add(sqlInsertVo.getSqlSetMap());
+            sqlBatchVo.setSql(sqlInsertVo.getSql());
         }
         return sqlBatchVo;
     }
@@ -543,10 +541,10 @@ public class SQLBuilder {
      * @param tableNameCus
      * @return
      */
-    public static <T> SQLUpdateVo buildReplaceBatchTableSQL(T obj, String tableNameCus) {
+    public static <T> SQLInsertVo buildReplaceBatchTableSQL(T obj, String tableNameCus) {
         Class clazz = obj.getClass();
-        SQLUpdateVo sqlUpdateVo = new SQLUpdateVo();
-        Map<Field, Object> sqlSetMap = sqlUpdateVo.getSqlSetMap();
+        SQLInsertVo sqlInsertVo = new SQLInsertVo();
+        Map<Field, Object> sqlSetMap = sqlInsertVo.getSqlSetMap();
         //
         String tableName = SQLBuilder.getTableName(clazz);
         if (!StringUtils.isEmpty(tableNameCus)) {
@@ -555,10 +553,11 @@ public class SQLBuilder {
         Field[] fields = clazz.getDeclaredFields();
         // build sql
         StringBuilder sqlBuilder = new StringBuilder();
-        StringBuilder sqlSetBuilder = new StringBuilder();
-        StringBuilder sqlWhereBuilder = new StringBuilder(" WHERE ");
+        StringBuilder sqlColumnWholeBuilder = new StringBuilder(" ");
+        StringBuilder sqlColumnBuilder = new StringBuilder();
+        StringBuilder sqlQuestionWholeBuilder = new StringBuilder();
+        StringBuilder sqlQuestionBuilder = new StringBuilder();
         boolean hasAnnotation = false;
-        Map<Field, Object> whereFieldValueMap = Maps.newLinkedHashMap();
         for (Field field : fields) {
             try {
                 Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
@@ -566,32 +565,35 @@ public class SQLBuilder {
                 Assert.notNull(fieldMeta, "Member Variable has not FieldMeta Annotation");
                 hasAnnotation = true;
                 String fieldName = field.getName();
-                String tableFieldName = HumpUtils.underscoreName(fieldName);
+                //
                 String getFieldName = "get" + SQLBuilder.captureName(fieldName);
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
                 Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
-
-                sqlSetBuilder.append(tableFieldName).append("=?,");
+                // if have value,set column in SQL
+                String tableFieldName = HumpUtils.underscoreName(fieldName);
+                sqlColumnBuilder.append(tableFieldName).append(",");
+                sqlQuestionBuilder.append("?,");
                 sqlSetMap.put(field, getMethodValue);
             } catch (Exception e) {
                 continue;
             }
         }
-        // gen Where SQL
-        for (Map.Entry<Field, Object> item : whereFieldValueMap.entrySet()) {
-            Field field = item.getKey();
-            Object getMethodValue = item.getValue();
-            sqlSetMap.put(field, getMethodValue);
-        }
         Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
-        //
-        String sqlSetString = sqlSetBuilder.toString();
-        sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
-        //
-        sqlBuilder.append("REPLACE INTO ").append(tableName).append(" SET ").append(sqlSetString).append(sqlWhereBuilder);
-        sqlUpdateVo.setSql(sqlBuilder.toString());
-        sqlUpdateVo.setSqlSetMap(sqlSetMap);
-        return sqlUpdateVo;
+        // build column sql
+        String sqlColumnString = sqlColumnBuilder.toString();
+        sqlColumnString = sqlColumnString.substring(0, sqlColumnString.lastIndexOf(","));
+        // build question sql
+        String sqlQuestionString = sqlQuestionBuilder.toString();
+        sqlQuestionString = sqlQuestionString.substring(0, sqlQuestionString.lastIndexOf(","));
+        // build parentheses sql
+        sqlQuestionWholeBuilder.append("(").append(sqlQuestionString).append(")");
+        sqlColumnWholeBuilder.append("(").append(sqlColumnString).append(")");
+        // build whole sql
+        sqlBuilder.append("REPLACE INTO ").append(tableName)
+                .append(sqlColumnWholeBuilder).append(" VALUES ").append(sqlQuestionWholeBuilder);
+        sqlInsertVo.setSql(sqlBuilder.toString());
+        sqlInsertVo.setSqlSetMap(sqlSetMap);
+        return sqlInsertVo;
     }
 }
