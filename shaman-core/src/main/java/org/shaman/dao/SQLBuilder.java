@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtils;
@@ -155,6 +156,8 @@ public class SQLBuilder {
         List sqlWhereParamList = Lists.newArrayList();
         boolean hasAnnotation = false;
         Map<Field, Object> whereFieldValueMap = Maps.newLinkedHashMap();
+        boolean idCondition = false;
+        Pair<Field, Object> idValuePair = null;
         for (Field field : fields) {
             try {
                 Assert.isTrue(field.isAnnotationPresent(FieldMeta.class), "Member Variable has not Annotation");
@@ -174,8 +177,10 @@ public class SQLBuilder {
                 }
                 if (fieldMeta.id() && CollectionUtils.isEmpty(sqlWhereCusSet)) {
                     // where primary key
+                    // first appear,but mast be set at last
                     sqlWhereBuilder.append(tableFieldName).append("=? ");
-                    sqlSetMap.put(field, getMethodValue);
+                    idCondition = true;
+                    idValuePair = new ImmutablePair<Field, Object>(field, getMethodValue);
                 } else if ((!CollectionUtils.isEmpty(sqlWhereCusSet) &&
                         !sqlWhereCusSet.contains(HumpUtils.underscoreName(fieldName)))
                         || CollectionUtils.isEmpty(sqlWhereCusSet)) {
@@ -193,6 +198,10 @@ public class SQLBuilder {
             Object getMethodValue = item.getValue();
             sqlSetMap.put(field, getMethodValue);
             sqlWhereParamList.add(HumpUtils.underscoreName(fieldName).concat("=?"));
+        }
+        // id condition valuePair,must be set at last
+        if (idCondition) {
+            sqlSetMap.put(idValuePair.getLeft(), idValuePair.getRight());
         }
         Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
         //
