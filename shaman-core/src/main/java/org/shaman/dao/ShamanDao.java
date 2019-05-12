@@ -1,8 +1,12 @@
 package org.shaman.dao;
 
+import org.shaman.dao.setter.InsertPreparedStatementCreator;
 import org.shaman.exception.ShamanArgsException;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -186,6 +190,21 @@ public class ShamanDao {
     }
 
     /**
+     * insertObjectReturnGenKeyLong insertObjectReturnGenKeyLong
+     *
+     * @param obj
+     * @param <T>
+     */
+    public <T> Long insertObjectReturnGenKeyLong(T obj) {
+        SQLInsertVo sqlInsertVo = SQLBuilder.buildInsertTableSQL(obj, null);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        InsertPreparedStatementCreator insertPreparedStatementCreator =
+                new InsertPreparedStatementCreator(sqlInsertVo);
+        shamanTemplate.update(insertPreparedStatementCreator, keyHolder);
+        return keyHolder.getKey().longValue();
+    }
+
+    /**
      * updateBatch updateBatch
      * update key default primary key
      *
@@ -237,7 +256,7 @@ public class ShamanDao {
      * @param objectList
      * @param <T>
      */
-    public <T> void replaceBatch(List<T> objectList){
+    public <T> void replaceBatch(List<T> objectList) {
         this.replaceBatch(objectList, null);
     }
 
@@ -248,7 +267,7 @@ public class ShamanDao {
      * @param tableName
      * @param <T>
      */
-    public <T> void replaceBatch(List<T> objectList,String tableName){
+    public <T> void replaceBatch(List<T> objectList, String tableName) {
         if (CollectionUtils.isEmpty(objectList)) {
             return;
         }
@@ -267,7 +286,7 @@ public class ShamanDao {
      *
      * @param deleteVo
      */
-    public void deleteRow(DeleteVo deleteVo) {
+    public void delete(DeleteVo deleteVo) {
         String deleteSQL = SQLBuilder.buildDeleteTableSQL(deleteVo);
         shamanTemplate.delete(deleteSQL);
     }
