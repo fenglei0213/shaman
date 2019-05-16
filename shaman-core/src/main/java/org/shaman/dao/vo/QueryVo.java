@@ -57,7 +57,7 @@ public class QueryVo<T> extends BaseVo<T> {
      * @param columns
      * @return
      */
-    public QueryVo addColumnObjArray(String... columns) {
+    public QueryVo addColumnArray(String... columns) {
         this.selectColumnList = Arrays.asList(columns);
         return this;
     }
