@@ -206,7 +206,9 @@ public class SQLBuilder {
         Assert.isTrue(hasAnnotation, "POJO has not FieldMeta Annotation");
         //
         String sqlSetString = sqlSetBuilder.toString();
+//        if (!StringUtils.isEmpty(sqlSetString)) {
         sqlSetString = sqlSetString.substring(0, sqlSetString.lastIndexOf(","));
+//        }
         //
         sqlWhereBuilder.append(StringUtils.join(sqlWhereParamList, " AND "));
         //
@@ -234,6 +236,7 @@ public class SQLBuilder {
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryVo.getWhereColumnMap();
         Map<String, List<Object>> whereColumnInMap = queryVo.getWhereColumnInMap();
+        Map<String, List<Object>> whereColumnUnEqualInMap = queryVo.getWhereColumnUnEqualInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
         ImmutablePair<Integer, Integer> limitPair = queryVo.getLimitPair();
         // build SQL SELECT
@@ -265,6 +268,7 @@ public class SQLBuilder {
             // build SQL WHERE
             String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                     whereColumnInMap,
+                    whereColumnUnEqualInMap,
                     argList, limitPair);
             sqlBuilder.append(sqlWhereString);
         }
@@ -280,11 +284,14 @@ public class SQLBuilder {
      *
      * @param whereColumnMap
      * @param whereColumnInMap
+     * @param whereColumnUnEqualInMap
      * @param argList
+     * @param limitPair
      * @return
      */
     public static String buildSQLWhere(Map<String, Object> whereColumnMap,
                                        Map<String, List<Object>> whereColumnInMap,
+                                       Map<String, List<Object>> whereColumnUnEqualInMap,
                                        List<Object> argList,
                                        ImmutablePair<Integer, Integer> limitPair) {
         List<String> whereConditionAllList = Lists.newArrayList();
@@ -306,32 +313,39 @@ public class SQLBuilder {
             whereConditionAllList.add(sqlWhereString);
         }
         // IN WHERE Condition
-        // bug Only once
+        // bug Only once IN Condition
         StringBuilder sqlWhereInItemBuilder = new StringBuilder();
         for (Map.Entry<String, List<Object>> mapItem : whereColumnInMap.entrySet()) {
             String whereColumnIn = mapItem.getKey();
-            List<Object> NumberList = mapItem.getValue();
+            List<Object> numberList = mapItem.getValue();
             sqlWhereInItemBuilder.append(whereColumnIn)
                     .append(" IN ").append("(");
             List<String> sqlWhereInItemList = Lists.newArrayList();
-            for (Object obj : NumberList) {
-                StringBuffer objBuf = new StringBuffer();
-                if (obj instanceof String) {
-                    objBuf = objBuf.append("\"")
-                            .append(obj.toString())
-                            .append("\"");
-                } else {
-                    objBuf = objBuf.append(obj.toString());
-                }
-                StringBuilder sqlWhereInItemItemBuilder = new StringBuilder(objBuf);
-                sqlWhereInItemList.add(sqlWhereInItemItemBuilder.toString());
-            }
+            SQLBuilder.buildSelectWhereInValueList(numberList, sqlWhereInItemList);
             sqlWhereInItemBuilder.append(StringUtils.join(sqlWhereInItemList, ","))
                     .append(")");
         }
         if (!StringUtils.isEmpty(sqlWhereInItemBuilder)) {
             whereConditionAllList.add(sqlWhereInItemBuilder.toString());
         }
+        // unEqual In Condition
+        // IN WHERE Condition
+        // bug Only once IN Condition
+        StringBuilder sqlWhereUnEqualInItemBuilder = new StringBuilder();
+        for (Map.Entry<String, List<Object>> mapItem : whereColumnUnEqualInMap.entrySet()) {
+            String whereColumnUnEqualIn = mapItem.getKey();
+            List<Object> numberList = mapItem.getValue();
+            sqlWhereUnEqualInItemBuilder.append(whereColumnUnEqualIn)
+                    .append(" NOT IN ").append("(");
+            List<String> sqlWhereUnEqualInItemList = Lists.newArrayList();
+            SQLBuilder.buildSelectWhereInValueList(numberList, sqlWhereUnEqualInItemList);
+            sqlWhereUnEqualInItemBuilder.append(StringUtils.join(sqlWhereUnEqualInItemList, ","))
+                    .append(")");
+        }
+        if (!StringUtils.isEmpty(sqlWhereUnEqualInItemBuilder)) {
+            whereConditionAllList.add(sqlWhereUnEqualInItemBuilder.toString());
+        }
+        //
         StringBuilder whereSql = sqlWherePrefixBuilder
                 .append(StringUtils.join(whereConditionAllList, " AND "));
         if (limitPair != null) {
@@ -339,6 +353,28 @@ public class SQLBuilder {
                     .append(",").append(limitPair.getRight());
         }
         return whereSql.toString();
+    }
+
+    /**
+     * buildSelectWhereInValueList buildSelectWhereInValueList
+     *
+     * @param numberList
+     * @param sqlWhereUnEqualInItemList
+     * @return
+     */
+    public static void buildSelectWhereInValueList(List<Object> numberList, List<String> sqlWhereUnEqualInItemList) {
+        for (Object obj : numberList) {
+            StringBuffer objBuf = new StringBuffer();
+            if (obj instanceof String) {
+                objBuf = objBuf.append("\"")
+                        .append(obj.toString())
+                        .append("\"");
+            } else {
+                objBuf = objBuf.append(obj.toString());
+            }
+            StringBuilder sqlWhereUnEqualInItemItemBuilder = new StringBuilder(objBuf);
+            sqlWhereUnEqualInItemList.add(sqlWhereUnEqualInItemItemBuilder.toString());
+        }
     }
 
 

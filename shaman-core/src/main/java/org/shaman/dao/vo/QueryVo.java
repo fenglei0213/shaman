@@ -20,6 +20,8 @@ public class QueryVo<T> extends BaseVo<T> {
 
     private Map<String, List<Object>> whereColumnInMap = Maps.newLinkedHashMap();
 
+    private Map<String, List<Object>> whereColumnUnEqualInMap = Maps.newLinkedHashMap();
+
     private Map<String, Integer> distinctColumnMap = Maps.newHashMap();
 
     private ImmutablePair<Integer, Integer> limitPair;
@@ -123,9 +125,22 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
+     * addUnEqualInCondition addUnEqualInCondition
+     *
+     * @param key
+     * @param unEqualInList
+     * @return
+     */
+    public QueryVo addUnEqualInCondition(String key, List<Object> unEqualInList) {
+        this.whereColumnUnEqualInMap.put(key, unEqualInList);
+        return this;
+    }
+
+    /**
      * addInCondition addInCondition
      * <p>
      * 此方法有问题.会和 Object... 方法冲突,认为List是一个Object
+     * 所以将方法名改了个名字
      *
      * @param key
      * @param inList
@@ -222,5 +237,13 @@ public class QueryVo<T> extends BaseVo<T> {
 
     public void setCountDistinctColumnName(String countDistinctColumnName) {
         this.countDistinctColumnName = countDistinctColumnName;
+    }
+
+    public Map<String, List<Object>> getWhereColumnUnEqualInMap() {
+        return whereColumnUnEqualInMap;
+    }
+
+    public void setWhereColumnUnEqualInMap(Map<String, List<Object>> whereColumnUnEqualInMap) {
+        this.whereColumnUnEqualInMap = whereColumnUnEqualInMap;
     }
 }

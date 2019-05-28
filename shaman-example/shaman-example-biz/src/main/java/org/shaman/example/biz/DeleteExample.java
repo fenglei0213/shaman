@@ -26,6 +26,6 @@ public class DeleteExample {
         DeleteVo deleteVo = ShamanVos.newDeleteVo(UserInfo.class);
         deleteVo.setPrimaryKeyName("id");
         deleteVo.setIdList(Arrays.asList(id));
-        shamanDao.deleteRow(deleteVo);
+//        shamanDao.deleteRow(deleteVo);
     }
 }
