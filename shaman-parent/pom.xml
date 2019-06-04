@@ -180,11 +180,4 @@
             <!-- WEB end -->
         </dependencies>
     </dependencyManagement>
-    <distributionManagement>
-        <repository>
-            <id>fenglei0213-mvn-repo</id>
-            <name>fenglei0213-mvn-repo</name>
-            <url>file://C:/workspace/github/maven-repo/repository/</url>
-        </repository>
-    </distributionManagement>
 </project>
