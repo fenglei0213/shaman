@@ -1,7 +1,6 @@
 package org.shaman.example.biz;
 
 import org.junit.Test;
-import org.shaman.example.BaseTest;
 import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

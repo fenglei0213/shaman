@@ -55,6 +55,17 @@ public class ShamanDao {
     }
 
     /**
+     * queryForCountInt queryForCountInt
+     *
+     * @param sql
+     * @param args
+     * @return
+     */
+    public int queryForCountInt(String sql, Object[] args) {
+        return shamanTemplate.queryForObject(sql, args, Integer.class);
+    }
+
+    /**
      * queryForCountLong queryForCountLong
      *
      * @param queryVo
@@ -63,6 +74,17 @@ public class ShamanDao {
     public long queryForCountLong(QueryVo queryVo) {
         SQLSelectVo sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryForLong(sqlSelectVo);
+    }
+
+    /**
+     * queryForCountLong queryForCountLong
+     *
+     * @param sql
+     * @param args
+     * @return
+     */
+    public long queryForCountLong(String sql, Object[] args) {
+        return shamanTemplate.queryForObject(sql, args, Long.class);
     }
 
     /**

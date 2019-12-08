@@ -1,20 +1,12 @@
 package org.shaman.example.biz;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.shaman.example.BaseTest;
 import org.shaman.example.biz.utils.MD5Util;
 import org.shaman.example.biz.vo.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
