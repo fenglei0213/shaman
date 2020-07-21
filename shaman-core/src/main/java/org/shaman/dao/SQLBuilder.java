@@ -269,7 +269,10 @@ public class SQLBuilder {
         // join SQL FROM
         sqlBuilder.append(" FROM ").append(tableName);
         // join SQL WHERE
-        if (!CollectionUtils.isEmpty(whereColumnMap)) {
+        if (!CollectionUtils.isEmpty(whereColumnMap) ||
+                !CollectionUtils.isEmpty(whereColumnInMap) ||
+                !CollectionUtils.isEmpty(whereColumnLikeMap) ||
+                !CollectionUtils.isEmpty(whereColumnUnEqualInMap)) {
             // build SQL WHERE
             String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                     whereColumnInMap,
