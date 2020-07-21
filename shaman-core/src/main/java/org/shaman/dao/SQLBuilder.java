@@ -338,10 +338,10 @@ public class SQLBuilder {
             String likeKey = mapItem.getKey();
             String likeValue = mapItem.getValue();
             sqlWhereLikeItemBuilder.append(likeKey)
-                    .append(" LIKE ").append("'%").append(likeValue).append("%' AND");
+                    .append(" LIKE ").append("'%").append(likeValue).append("%' AND ");
         }
         // 去掉最后的 AND
-        sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 4);
+        sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 5);
         if (!StringUtils.isEmpty(sqlWhereLikeItemBuilder)) {
             whereConditionAllList.add(sqlWhereLikeItemBuilder.toString());
         }
