@@ -8,6 +8,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.shaman.dao.annotation.FieldMeta;
 import org.shaman.dao.vo.*;
 import org.shaman.util.HumpUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
@@ -22,6 +24,8 @@ import java.util.Set;
  * Created by fenglei on 2016/3/3.
  */
 public class SQLBuilder {
+
+    private static Logger logger = LoggerFactory.getLogger(SQLBuilder.class);
 
     /**
      * buildInsertTableSQL buildInsertTableSQL
@@ -278,6 +282,7 @@ public class SQLBuilder {
         sqlSelectVo.setSql(sqlBuilder.toString());
         sqlSelectVo.setTableClazz(tableClazz);
         sqlSelectVo.setArgList(argList);
+        logger.debug("SQL:{}", sqlSelectVo.getSql());
         return sqlSelectVo;
     }
 
