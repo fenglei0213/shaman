@@ -273,7 +273,6 @@ public class SQLBuilder {
                 !CollectionUtils.isEmpty(whereColumnInMap) ||
                 !CollectionUtils.isEmpty(whereColumnLikeMap) ||
                 !CollectionUtils.isEmpty(whereColumnUnEqualInMap)) {
-            logger.debug("buildSQLWhere Come in");
             // build SQL WHERE
             String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                     whereColumnInMap,
@@ -347,7 +346,8 @@ public class SQLBuilder {
             String likeKey = mapItem.getKey();
             String likeValue = mapItem.getValue();
             sqlWhereLikeItemBuilder.append(likeKey)
-                    .append(" LIKE ").append("'%").append(likeValue).append("%' AND ");
+                    .append(" LIKE ? AND ");
+            argList.add("%" + likeValue + "%");
         }
         // 去掉最后的 AND
         sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 5);
