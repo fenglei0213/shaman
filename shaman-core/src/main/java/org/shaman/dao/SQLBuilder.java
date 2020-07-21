@@ -273,6 +273,7 @@ public class SQLBuilder {
                 !CollectionUtils.isEmpty(whereColumnInMap) ||
                 !CollectionUtils.isEmpty(whereColumnLikeMap) ||
                 !CollectionUtils.isEmpty(whereColumnUnEqualInMap)) {
+            logger.debug("buildSQLWhere Come in");
             // build SQL WHERE
             String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                     whereColumnInMap,
