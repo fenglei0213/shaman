@@ -51,4 +51,16 @@ public class QueryExample {
 
         return userInfo;
     }
+
+    /**
+     * queryForUserCount queryForUserCount
+     *
+     * @return
+     */
+    public int queryForUserCount() {
+        QueryVo<UserInfo> queryVo = ShamanVos.newQueryVo(UserInfo.class);
+        queryVo.addLikeCondition(UserInfo.USER_NAME, "fenglei");
+        int count = shamanDao.queryForCountInt(queryVo);
+        return count;
+    }
 }

@@ -26,4 +26,11 @@ public class QueryExampleTest extends BaseTest {
         UserInfo userInfo = queryExample.queryForUserInfo(userName, passwd);
         logger.info(userInfo.toString());
     }
+
+    @Test
+    public void testQueryWhereLike() {
+        int count = queryExample.queryForUserCount();
+        System.out.println(count);
+        ;
+    }
 }

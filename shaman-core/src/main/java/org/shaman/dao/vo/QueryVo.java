@@ -20,6 +20,8 @@ public class QueryVo<T> extends BaseVo<T> {
 
     private Map<String, List<Object>> whereColumnInMap = Maps.newLinkedHashMap();
 
+    private Map<String, String> whereColumnLikeMap = Maps.newLinkedHashMap();
+
     private Map<String, List<Object>> whereColumnUnEqualInMap = Maps.newLinkedHashMap();
 
     private Map<String, Integer> distinctColumnMap = Maps.newHashMap();
@@ -153,6 +155,18 @@ public class QueryVo<T> extends BaseVo<T> {
     }
 
     /**
+     * addLikeCondition addLikeCondition
+     *
+     * @param key
+     * @param likeValue
+     * @return
+     */
+    public QueryVo addLikeCondition(String key, String likeValue) {
+        this.whereColumnLikeMap.put(key, likeValue);
+        return this;
+    }
+
+    /**
      * addInCondition addInCondition
      *
      * @param key
@@ -207,8 +221,22 @@ public class QueryVo<T> extends BaseVo<T> {
         return this;
     }
 
+    /**
+     * getWhereColumnInMap getWhereColumnInMap
+     *
+     * @return
+     */
     public Map<String, List<Object>> getWhereColumnInMap() {
         return whereColumnInMap;
+    }
+
+    /**
+     * getWhereColumnLikeMap getWhereColumnLikeMap
+     *
+     * @return
+     */
+    public Map<String, String> getWhereColumnLikeMap() {
+        return whereColumnLikeMap;
     }
 
     public void setWhereColumnInMap(Map<String, List<Object>> whereColumnInMap) {

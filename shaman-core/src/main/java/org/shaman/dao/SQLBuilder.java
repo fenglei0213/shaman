@@ -236,6 +236,7 @@ public class SQLBuilder {
         String tableName = SQLBuilder.getTableName(tableClazz);
         Map<String, Object> whereColumnMap = queryVo.getWhereColumnMap();
         Map<String, List<Object>> whereColumnInMap = queryVo.getWhereColumnInMap();
+        Map<String, String> whereColumnLikeMap = queryVo.getWhereColumnLikeMap();
         Map<String, List<Object>> whereColumnUnEqualInMap = queryVo.getWhereColumnUnEqualInMap();
         Map<String, Integer> distinctMap = queryVo.getDistinctColumnMap();
         ImmutablePair<Integer, Integer> limitPair = queryVo.getLimitPair();
@@ -268,6 +269,7 @@ public class SQLBuilder {
             // build SQL WHERE
             String sqlWhereString = SQLBuilder.buildSQLWhere(whereColumnMap,
                     whereColumnInMap,
+                    whereColumnLikeMap,
                     whereColumnUnEqualInMap,
                     argList, limitPair);
             sqlBuilder.append(sqlWhereString);
@@ -284,6 +286,7 @@ public class SQLBuilder {
      *
      * @param whereColumnMap
      * @param whereColumnInMap
+     * @param whereColumnLikeMap
      * @param whereColumnUnEqualInMap
      * @param argList
      * @param limitPair
@@ -291,6 +294,7 @@ public class SQLBuilder {
      */
     public static String buildSQLWhere(Map<String, Object> whereColumnMap,
                                        Map<String, List<Object>> whereColumnInMap,
+                                       Map<String, String> whereColumnLikeMap,
                                        Map<String, List<Object>> whereColumnUnEqualInMap,
                                        List<Object> argList,
                                        ImmutablePair<Integer, Integer> limitPair) {
@@ -327,6 +331,19 @@ public class SQLBuilder {
         }
         if (!StringUtils.isEmpty(sqlWhereInItemBuilder)) {
             whereConditionAllList.add(sqlWhereInItemBuilder.toString());
+        }
+        // Like Condition
+        StringBuilder sqlWhereLikeItemBuilder = new StringBuilder();
+        for (Map.Entry<String, String> mapItem : whereColumnLikeMap.entrySet()) {
+            String likeKey = mapItem.getKey();
+            String likeValue = mapItem.getValue();
+            sqlWhereLikeItemBuilder.append(likeKey)
+                    .append(" LIKE ").append("%").append(likeValue).append("% AND");
+        }
+        // 去掉最后的 AND
+        sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 4);
+        if (!StringUtils.isEmpty(sqlWhereLikeItemBuilder)) {
+            whereConditionAllList.add(sqlWhereLikeItemBuilder.toString());
         }
         // unEqual In Condition
         // IN WHERE Condition
