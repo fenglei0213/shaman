@@ -349,9 +349,9 @@ public class SQLBuilder {
                     .append(" LIKE ? AND ");
             argList.add("%" + likeValue + "%");
         }
-        // 去掉最后的 AND
-        sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 5);
         if (!StringUtils.isEmpty(sqlWhereLikeItemBuilder)) {
+            // 去掉最后的 AND
+            sqlWhereLikeItemBuilder.setLength(sqlWhereLikeItemBuilder.length() - 5);
             whereConditionAllList.add(sqlWhereLikeItemBuilder.toString());
         }
         // unEqual In Condition
