@@ -21,7 +21,7 @@
         <guava.version>19.0</guava.version>
         <snakeyaml.version>1.9</snakeyaml.version>
         <h2.version>1.4.191</h2.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <commons.lang3.version>3.4</commons.lang3.version>
         <!-- example -->
         <jstl.version>1.2</jstl.version>
