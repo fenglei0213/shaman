@@ -14,7 +14,7 @@
     <modules>
         <module>shaman-parent</module>
         <module>shaman-core</module>
-        <module>shaman-example</module>
+<!--        <module>shaman-example</module>-->
     </modules>
     <developers>
         <developer>
