@@ -667,4 +667,14 @@ public class SQLBuilder {
         sqlInsertVo.setSqlSetMap(sqlSetMap);
         return sqlInsertVo;
     }
+
+    /**
+     * buildRenameTableSQL 构建删除表SQL
+     * @param sourceTableName
+     * @param targetTableName
+     * @return
+     */
+    public static String buildRenameTableSQL(String sourceTableName, String targetTableName) {
+        return "RENAME TABLE " + sourceTableName + " TO " + targetTableName;
+    }
 }

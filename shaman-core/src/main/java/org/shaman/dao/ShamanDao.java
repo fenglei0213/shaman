@@ -324,13 +324,23 @@ public class ShamanDao {
     }
 
     /**
-     * truncateTable truncateTable
+     * truncateTable truncate 表
      *
      * @param tableName
      */
     public void truncateTable(String tableName) {
         String truncateTableSQL = SQLBuilder.buildTruncateTableSQL(tableName);
         shamanTemplate.execute(truncateTableSQL);
+    }
+
+    /**
+     * renameTableName 重命名表
+     * @param sourceTableName
+     * @param targetTableName
+     */
+    public void renameTableName(String sourceTableName, String targetTableName) {
+        String renameTableNameSQL = SQLBuilder.buildRenameTableSQL(sourceTableName, targetTableName);
+        shamanTemplate.execute(renameTableNameSQL);
     }
 
     public void setShamanTemplate(ShamanTemplate shamanTemplate) {
