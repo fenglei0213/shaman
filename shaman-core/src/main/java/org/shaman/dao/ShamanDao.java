@@ -335,11 +335,24 @@ public class ShamanDao {
 
     /**
      * renameTableName 重命名表
+     *
      * @param sourceTableName
      * @param targetTableName
      */
     public void renameTableName(String sourceTableName, String targetTableName) {
         String renameTableNameSQL = SQLBuilder.buildRenameTableSQL(sourceTableName, targetTableName);
+        shamanTemplate.execute(renameTableNameSQL);
+    }
+
+    /**
+     * renameTableNameAtom 重命名表
+     *
+     * @param sourceTableName     原表表名
+     * @param targetTableName     目标表表名
+     * @param targetTableNameBack 目标表备份表名
+     */
+    public void renameTableNameAtom(String sourceTableName, String targetTableName, String targetTableNameBack) {
+        String renameTableNameSQL = SQLBuilder.buildRenameTableSQLAtom(sourceTableName, targetTableName, targetTableNameBack);
         shamanTemplate.execute(renameTableNameSQL);
     }
 

@@ -681,4 +681,20 @@ public class SQLBuilder {
     public static String buildRenameTableSQL(String sourceTableName, String targetTableName) {
         return "RENAME TABLE " + sourceTableName + " TO " + targetTableName;
     }
+
+    /**
+     * buildRenameTableSQLAtom 原子操作，构建删除表SQL
+     *
+     * @param sourceTableName
+     * @param targetTableName
+     * @return
+     */
+    public static String buildRenameTableSQLAtom(String sourceTableName,
+                                                 String targetTableName,
+                                                 String targetTableNameBack) {
+        return "RENAME TABLE " + sourceTableName +
+                " TO " + targetTableName +
+                ", " + targetTableName +
+                " TO " + targetTableNameBack;
+    }
 }
