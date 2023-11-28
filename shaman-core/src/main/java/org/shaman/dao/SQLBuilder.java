@@ -234,6 +234,9 @@ public class SQLBuilder {
         List<Object> argList = sqlSelectVo.getArgList();
         // get SQL meta data
         List<String> selectColumnList = queryVo.getSelectColumnList();
+        if (CollectionUtils.isEmpty(selectColumnList)) {
+            selectColumnList.add("*");
+        }
         String countColumName = queryVo.getCountColumnName();
         String countDistinctColumnName = queryVo.getCountDistinctColumnName();
         Class tableClazz = queryVo.getTableClazz();
@@ -670,6 +673,7 @@ public class SQLBuilder {
 
     /**
      * buildRenameTableSQL 构建删除表SQL
+     *
      * @param sourceTableName
      * @param targetTableName
      * @return
