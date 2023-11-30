@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 /**
  * Created by fenglei on 2016/6/11.
  */
-public class ReflectionUtils {
+public class ShamanReflectionUtils {
 
     /**
      * getGenericClass getGenericClass

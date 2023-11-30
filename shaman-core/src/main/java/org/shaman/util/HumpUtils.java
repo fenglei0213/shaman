@@ -13,6 +13,7 @@ public class HumpUtils {
     /**
      * 将驼峰式命名的字符串转换为下划线小写方式。如果转换前的驼峰式命名的字符串为空，则返回空字符串。</br>
      * 例如：HelloWorld->HELLO_WORLD
+     *
      * @param name 转换前的驼峰式命名的字符串
      * @return 转换后下划线小写方式命名的字符串
      */
@@ -38,6 +39,7 @@ public class HumpUtils {
     /**
      * 将下划线大写方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
      * 例如：HELLO_WORLD->HelloWorld
+     *
      * @param name 转换前的下划线大写方式命名的字符串
      * @return 转换后的驼峰式命名的字符串
      */
@@ -53,7 +55,7 @@ public class HumpUtils {
         }
         // 用下划线将原始字符串分割
         String camels[] = name.split("_");
-        for (String camel :  camels) {
+        for (String camel : camels) {
             // 跳过原始字符串中开头、结尾的下换线或双重下划线
             if (camel.isEmpty()) {
                 continue;
@@ -69,5 +71,22 @@ public class HumpUtils {
             }
         }
         return result.toString();
+    }
+
+    /**
+     * 字符串首字母大写函数
+     *
+     * @param str
+     * @return
+     */
+    public static String capitalizeFirstLetter(String str) {
+        // 如果字符串为空或者长度为0，直接返回原字符串
+        if (str == null || str.length() == 0) {
+            return str;
+        }
+        // 否则，获取字符串的第一个字符，转换为大写，然后拼接上剩余的字符，返回结果
+        char first = Character.toUpperCase(str.charAt(0));
+        String rest = str.substring(1);
+        return first + rest;
     }
 }

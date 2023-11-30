@@ -108,7 +108,7 @@ public class ShamanDao {
      * @return
      */
     public <T> List<T> queryList(QueryVo<T> queryVo) {
-//        Class tableClazz = ReflectionUtils.getGenericClass(queryVo);
+//        Class tableClazz = ShamanReflectionUtils.getGenericClass(queryVo);
 //        queryVo.setTableClazz(tableClazz);
         SQLSelectVo<T> sqlSelectVo = SQLBuilder.buildSelectTableSQL(queryVo);
         return shamanTemplate.queryListForTable(sqlSelectVo);
