@@ -2,6 +2,7 @@ package org.shaman.dao;
 
 import org.shaman.dao.setter.InsertPreparedStatementCreator;
 import org.shaman.exception.ShamanArgsException;
+import org.shaman.util.HumpUtils;
 import org.springframework.dao.DataAccessException;
 import org.shaman.dao.vo.*;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -329,6 +330,17 @@ public class ShamanDao {
      * @param tableName
      */
     public void truncateTable(String tableName) {
+        String truncateTableSQL = SQLBuilder.buildTruncateTableSQL(tableName);
+        shamanTemplate.execute(truncateTableSQL);
+    }
+
+    /**
+     * truncateTable truncate 表
+     *
+     * @param className
+     */
+    public void truncateTable(Class className) {
+        String tableName = HumpUtils.underscoreName(className.getName());
         String truncateTableSQL = SQLBuilder.buildTruncateTableSQL(tableName);
         shamanTemplate.execute(truncateTableSQL);
     }
