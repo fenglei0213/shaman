@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class GenUtils {
+public class ShamanGenUtils {
 
     /**
      * genJavaPojoFile 生成Java文件,主函数入口
@@ -23,26 +23,25 @@ public class GenUtils {
      * @param userName
      * @param password
      * @param tableName
-     * @param outputFile
      */
-    public static void genJavaPojo(String driverName,
-                                   String url,
-                                   String userName,
-                                   String password,
-                                   String tableName,
-                                   String outputFile) throws IOException {
-        String sql = "SELECT * FROM " + tableName + " LIMIT 1";
+    public static String genJavaPojo(String driverName,
+                                     String url,
+                                     String userName,
+                                     String password,
+                                     String dbName,
+                                     String tableName) throws IOException {
+        String sql = "SELECT * FROM " + dbName + "." + tableName + " LIMIT 1";
         SqlResVo sqlResVo = new SqlResVo();
         try {
-            sqlResVo = GenUtils.connectDB(driverName, url, userName, password, sql);
+            sqlResVo = ShamanGenUtils.connectDB(driverName, url, userName, password, sql);
             sqlResVo.setTableName(tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        String javaFileContent = GenUtils.genJavaPojoFile(sqlResVo);
-        ShamanFileUtils.writeFile(outputFile, javaFileContent);
+        String javaFileContent = ShamanGenUtils.genJavaPojoFile(sqlResVo);
+        return javaFileContent;
     }
 
     /**
@@ -75,10 +74,12 @@ public class GenUtils {
             for (int i = 1; i <= columnCount; i++) {
                 // getColumnName 拿到的是原始列名,不是别名,AS 别名的情况会重复
                 String columnName = rsMetaData.getColumnName(i);
-//                String columnName = rsMetaData.getColumnLabel(i);
+                // 驼峰命名法
+                columnName = HumpUtils.camelName(columnName);
                 String columnTypeName = rsMetaData.getColumnTypeName(i);
+                String javaColumnType = ShamanGenUtils.columnTypeTransform(columnTypeName);
                 columnNameList.add(columnName);
-                columnTypeList.add(columnTypeName);
+                columnTypeList.add(javaColumnType);
             }
             sqlResVo.setColumnNameList(columnNameList);
             sqlResVo.setColumnTypeList(columnTypeList);
@@ -86,6 +87,28 @@ public class GenUtils {
             throw e;
         }
         return sqlResVo;
+    }
+
+    /**
+     * columnTypeTransform 转换数据库类型
+     *
+     * @param columnType
+     * @return
+     */
+    public static String columnTypeTransform(String columnType) {
+        String transformRs = "";
+        if ("VARCHAR".equals(columnType)) {
+            transformRs = "String";
+        } else if ("BIGINT".equals(columnType)) {
+            transformRs = "Long";
+        } else if ("INT".equals(columnType)) {
+            transformRs = "Integer";
+        } else if ("DOUBLE".equals(columnType)) {
+            transformRs = "Double";
+        } else {
+            transformRs = "String";
+        }
+        return transformRs;
     }
 
     /**
@@ -97,19 +120,21 @@ public class GenUtils {
         StringBuilder sb = new StringBuilder();
         String tableName = sqlResVo.getTableName();
         String className = HumpUtils.capitalizeFirstLetter(HumpUtils.camelName(tableName));
-        sb.append("public class ").append(className).append(" {");
+        sb.append("public class ").append(className).append(" {").append("\n");
+        sb.append("public static final String TABLE_NAME = \"" + tableName + "\";").append("\n");
         // @FieldMeta(id = true)
         // private Long id;
         List<String> columnNameList = sqlResVo.getColumnNameList();
         List<String> columnTypeList = sqlResVo.getColumnTypeList();
         for (int i = 0; i < columnNameList.size(); i++) {
             if ("id".equals(columnNameList.get(i))) {
-                sb.append("@FieldMeta(id = true)");
+                sb.append("@FieldMeta(id = true)").append("\n");
             } else {
-                sb.append("@FieldMeta");
+                sb.append("@FieldMeta").append("\n");
             }
             sb.append("private ").append(columnTypeList.get(i))
-                    .append(" ").append(columnNameList.get(i)).append(";");
+                    .append(" ").append(columnNameList.get(i))
+                    .append(";").append("\n");
         }
         sb.append("}");
         return sb.toString();

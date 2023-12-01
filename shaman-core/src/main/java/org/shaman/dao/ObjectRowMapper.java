@@ -75,7 +75,13 @@ public class ObjectRowMapper implements RowMapper {
     private static void setFieldValue(Object form, Field field, String value) {
 
         String elemType = field.getType().toString();
-
+        if (value == null || value.equals("")) {
+            try {
+                field.set(form, null);
+            } catch (IllegalAccessException e) {
+                logger.error("setFieldValue Boolean Exception", e);
+            }
+        }
         if (elemType.indexOf("boolean") != -1 || elemType.indexOf("Boolean") != -1) {
             try {
                 field.set(form, Boolean.valueOf(value));
