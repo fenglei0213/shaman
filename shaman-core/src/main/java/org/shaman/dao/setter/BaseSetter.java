@@ -1,8 +1,12 @@
 package org.shaman.dao.setter;
 
+import org.springframework.util.ObjectUtils;
+
 import java.lang.reflect.Field;
+import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
@@ -23,15 +27,26 @@ public abstract class BaseSetter {
         // canonicalName update
 //        field.getClass().getCanonicalName();
         //clazz.getSimpleName();
+        if (objValue == null) {
+            if (objValue == null) {
+                pst.setNull(i, Types.NULL);
+                return;
+            }
+        }
         String elemType = field.getType().toString();
         if (elemType.indexOf("String") != -1) {
             pst.setString(i, (String) objValue);
         } else if (elemType.indexOf("Integer") != -1 || elemType.indexOf("int") != -1) {
             pst.setInt(i, (Integer) objValue);
-        } else if (elemType.indexOf("Long") != -1 || elemType.indexOf("long") != -1) {
+        } else if (elemType.indexOf("Long") != -1) {
             pst.setLong(i, (Long) objValue);
-        } else if (elemType.indexOf("Double") != -1 || elemType.indexOf("double") != -1) {
+        } else if (elemType.indexOf("Double") != -1) {
             pst.setDouble(i, (Double) objValue);
+        } else if (elemType.indexOf("Clob") != -1 || elemType.indexOf("clob") != -1) {
+            pst.setClob(i, (Clob) objValue);
+        } else {
+            System.out.println(elemType);
+            pst.setClob(i, (Clob) objValue);
         }
     }
 
@@ -47,10 +62,8 @@ public abstract class BaseSetter {
         for (Map.Entry<Field, Object> mapEntry : sqlSetMap.entrySet()) {
             Field field = mapEntry.getKey();
             Object objValue = mapEntry.getValue();
-            if (objValue != null) {
-                this.setFieldValue(pst, field, objValue, i);
-                i++;
-            }
+            this.setFieldValue(pst, field, objValue, i);
+            i++;
         }
         return i;
     }

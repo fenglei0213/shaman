@@ -5,6 +5,7 @@ import org.shaman.util.HumpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -52,11 +53,10 @@ public class ObjectRowMapper implements RowMapper {
                 } catch (Exception e) {
                     continue;
                 }
-                //修改相应filed的权限
+                //修改相应 field 的权限
                 boolean accessFlag = field.isAccessible();
                 field.setAccessible(true);
                 String value = rs.getString(underscoreName);
-                value = value == null ? "" : value;
                 ObjectRowMapper.setFieldValue(nt, field, value);
 
                 //恢复相应field的权限
@@ -74,7 +74,7 @@ public class ObjectRowMapper implements RowMapper {
 
     private static void setFieldValue(Object form, Field field, String value) {
 
-        String elemType = field.getType().toString();
+        String elemType = field.getType().toString().toLowerCase();
         if (value == null) {
             try {
                 field.set(form, null);
@@ -83,57 +83,91 @@ public class ObjectRowMapper implements RowMapper {
                 logger.error("setFieldValue Boolean Exception", e);
             }
         }
-        if (elemType.indexOf("boolean") != -1 || elemType.indexOf("Boolean") != -1) {
+        if (elemType.indexOf("boolean") != -1) {
             try {
-                field.set(form, Boolean.valueOf(value));
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Boolean.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Boolean Exception", e);
             }
-        } else if (elemType.indexOf("byte") != -1 || elemType.indexOf("Byte") != -1) {
+        } else if (elemType.indexOf("byte") != -1) {
             try {
                 field.set(form, Byte.valueOf(value));
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Byte Exception", e);
             }
-        } else if (elemType.indexOf("char") != -1 || elemType.indexOf("Character") != -1) {
+        } else if (elemType.indexOf("char") != -1) {
             try {
                 field.set(form, Character.valueOf(value.charAt(0)));
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Character Exception", e);
             }
-        } else if (elemType.indexOf("double") != -1 || elemType.indexOf("Double") != -1) {
+        } else if (elemType.indexOf("String") != -1) {
             try {
-                field.set(form, Double.valueOf(value));
+                field.set(form, value);
+            } catch (IllegalAccessException e) {
+                logger.error("setFieldValue String Exception", e);
+            }
+        } else if (elemType.indexOf("double") != -1) {
+            try {
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Double.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Double Exception", e);
             }
-        } else if (elemType.indexOf("float") != -1 || elemType.indexOf("Float") != -1) {
+        } else if (elemType.indexOf("float") != -1) {
             try {
-                field.set(form, Float.valueOf(value));
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Float.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Float Exception", e);
             }
-        } else if (elemType.indexOf("int") != -1 || elemType.indexOf("Integer") != -1) {
+        } else if (elemType.indexOf("int") != -1 || elemType.indexOf("integer") != -1) {
             try {
-                field.set(form, Integer.valueOf(value));
+                if ("".equals(value) || ObjectUtils.isEmpty(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Integer.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Integer Exception", e);
             }
-        } else if (elemType.indexOf("long") != -1 || elemType.indexOf("Long") != -1) {
+        } else if (elemType.indexOf("long") != -1) {
             try {
-                field.set(form, Long.valueOf(value));
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Long.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Long Exception", e);
             }
-        } else if (elemType.indexOf("short") != -1 || elemType.indexOf("Short") != -1) {
+        } else if (elemType.indexOf("short") != -1) {
             try {
-                field.set(form, Short.valueOf(value));
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Short.valueOf(value));
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Short Exception", e);
             }
         } else {
             try {
-                field.set(form, (Object) value);
+                if ("".equals(value) || ObjectUtils.isEmpty(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, (Object) value);
+                }
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue field.set Exception", e);
             }

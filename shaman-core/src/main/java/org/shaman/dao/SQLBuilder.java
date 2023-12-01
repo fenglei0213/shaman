@@ -62,7 +62,8 @@ public class SQLBuilder {
                 String getFieldName = "get" + SQLBuilder.captureName(fieldName);
                 Method getMethod = ReflectionUtils.findMethod(clazz, getFieldName);
                 Object getMethodValue = getMethod.invoke(obj);
-                Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
+                // 当值是空的时候,不能跳出循环,否则拼接的SQL会少若干个字段,这些字段的值是NULL
+//                Assert.notNull(getMethodValue, "Member Variable is null,loop will continue");
                 // if have value,set column in SQL
                 String tableFieldName = HumpUtils.underscoreName(fieldName);
                 sqlColumnBuilder.append(tableFieldName).append(",");
