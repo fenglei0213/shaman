@@ -687,15 +687,30 @@ public class SQLBuilder {
      * buildRenameTableSQLAtom 原子操作，构建删除表SQL
      *
      * @param sourceTableName
-     * @param targetTableName
+     * @param sourceTableNameBack
+     * @param sourceTableNameTemp
      * @return
      */
     public static String buildRenameTableSQLAtom(String sourceTableName,
-                                                 String targetTableName,
-                                                 String targetTableNameBack) {
+                                                 String sourceTableNameBack,
+                                                 String sourceTableNameTemp) {
         return "RENAME TABLE " + sourceTableName +
-                " TO " + targetTableName +
-                ", " + targetTableName +
-                " TO " + targetTableNameBack;
+                " TO " + sourceTableNameBack +
+                ", " + sourceTableNameTemp +
+                " TO " + sourceTableName;
+        // RENAME TABLE table1 TO temp_table, table2 TO table1, temp_table TO table2;
+    }
+
+
+    /**
+     * buildCopyTableSQL 构建复制表SQL
+     * 会检查表是否存在，不存在则创建
+     *
+     * @param sourceTableName
+     * @param targetTableName
+     * @return
+     */
+    public static String buildCopyTableSQL(String sourceTableName, String targetTableName) {
+        return "CREATE TABLE IF NOT EXISTS " + targetTableName + " LIKE " + sourceTableName;
     }
 }

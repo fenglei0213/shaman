@@ -360,12 +360,27 @@ public class ShamanDao {
      * renameTableNameAtom 重命名表
      *
      * @param sourceTableName     原表表名
-     * @param targetTableName     目标表表名
-     * @param targetTableNameBack 目标表备份表名
+     * @param sourceTableNameBack 原表备份表名
+     * @param sourceTableNameTemp 原表临时表名
      */
-    public void renameTableNameAtom(String sourceTableName, String targetTableName, String targetTableNameBack) {
-        String renameTableNameSQL = SQLBuilder.buildRenameTableSQLAtom(sourceTableName, targetTableName, targetTableNameBack);
+    public void renameTableNameAtom(String sourceTableName,
+                                    String sourceTableNameBack,
+                                    String sourceTableNameTemp) {
+        String renameTableNameSQL = SQLBuilder.buildRenameTableSQLAtom(sourceTableName,
+                sourceTableNameBack,
+                sourceTableNameTemp);
         shamanTemplate.execute(renameTableNameSQL);
+    }
+
+    /**
+     * copyTable 复制表
+     *
+     * @param sourceTableName 原表表名
+     * @param targetTableName 目标表表名
+     */
+    public void copyTable(String sourceTableName, String targetTableName) {
+        String copyTableSQL = SQLBuilder.buildCopyTableSQL(sourceTableName, targetTableName);
+        shamanTemplate.execute(copyTableSQL);
     }
 
     public void setShamanTemplate(ShamanTemplate shamanTemplate) {
