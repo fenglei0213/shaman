@@ -15,3 +15,6 @@ road map
 
 问题反馈:
 使用中发现Bug,请反馈给wx:fenglei173156
+
+备注
+service中出现两个shamanDao，xxShamanDao不要用原始shamanDao的名字，数据源容易乱

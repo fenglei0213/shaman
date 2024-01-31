@@ -131,6 +131,16 @@ public class ObjectRowMapper implements RowMapper {
             } catch (IllegalAccessException e) {
                 logger.error("setFieldValue Float Exception", e);
             }
+        } else if (elemType.indexOf("decimal") != -1) {
+            try {
+                if ("".equals(value)) {
+                    field.set(form, null);
+                } else {
+                    field.set(form, Double.valueOf(value));
+                }
+            } catch (IllegalAccessException e) {
+                logger.error("setFieldValue Float Exception", e);
+            }
         } else if (elemType.indexOf("int") != -1 || elemType.indexOf("integer") != -1) {
             try {
                 if ("".equals(value) || ObjectUtils.isEmpty(value)) {
